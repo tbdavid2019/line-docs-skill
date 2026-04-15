@@ -4,6 +4,11 @@ Knowledge and specialized workflows for building on the [LINE Platform](https://
 
 ## Mandatory: Always consult [references/INDEX.md](references/INDEX.md) first to locate specific documentation for any LINE task.
 
+## Installation and Usage Boundary
+- Normal skill usage only requires reading `SKILL.md` and the documentation under `references/`.
+- Before using the docs, try `git -C <skill-directory> pull origin main --ff-only` on the installed skill checkout. If it fails, continue silently with the local copy.
+- Do not run `scripts/sync-docs.sh` or `scripts/generate_index.py` unless the user explicitly asks to refresh or maintain this repository itself.
+
 ## Target Audience
 - Developers building LINE Bots (Messaging API)
 - Frontend developers building LIFF apps
@@ -24,18 +29,18 @@ If webhooks are not being received or are failing:
 1.  Check the "Channel settings" in the LINE Developers Console.
 2.  Verify the SSL certificate (LINE requires valid, non-self-signed certificates).
 3.  Use the "Verify" button in the console to test the endpoint.
-4.  Consult [references/messaging-api/webhooks.md](references/messaging-api/webhooks.md) for signature validation requirements.
+4.  Consult the relevant documents under `references/docs/messaging-api/`, located via [references/INDEX.md](references/INDEX.md), for webhook verification and signature validation requirements.
 
 ### 2. LIFF App Setup
 When creating a LIFF application:
-1.  Read [references/liff/overview.md](references/liff/overview.md).
+1.  Read [references/docs/liff/overview/index.html.md](references/docs/liff/overview/index.html.md).
 2.  Ensure the LIFF ID is correctly configured for the target environment (Compact, Tall, Full).
 3.  Check `liff.init()` error codes if the app fails to load.
 
 ### 3. Rich Menu Management
 To create or update a rich menu:
 1.  Retrieve existing menus via the API.
-2.  Validate the image dimensions (see [references/messaging-api/rich-menus.md](references/messaging-api/rich-menus.md)).
+2.  Validate the image dimensions using the Messaging API documents under `references/docs/messaging-api/`, such as the rich menu overview and related guides listed in [references/INDEX.md](references/INDEX.md).
 3.  Link the rich menu ID to the specific user or set it as default.
 
 ## Reference Entry Points
@@ -43,12 +48,14 @@ To create or update a rich menu:
 | Reference | Coverage |
 |---|---|
 | [INDEX.md](references/INDEX.md) | **Comprehensive directory of ALL LINE documentation** |
-| [messaging-api/](references/messaging-api/) | Messaging API (Bots, Webhooks, Push/Reply) |
-| [liff/](references/liff/) | LINE Front-end Framework (LIFF) |
-| [line-login/](references/line-login/) | OAuth and Social Login |
-| [line-pay/](references/line-pay/) | Payments and Transactions |
-| [social-api/](references/social-api/) | User profiles and social graph |
-| [faq/](references/faq/) | Common issues and community solutions |
+| `references/docs/messaging-api/` | Messaging API guides (Bots, Webhooks, Push/Reply) |
+| `references/reference/messaging-api/` | Messaging API reference pages |
+| `references/docs/liff/` | LIFF guides |
+| `references/reference/liff/` | LIFF reference pages |
+| `references/docs/line-login/` | LINE Login guides |
+| `references/reference/line-login/` | LINE Login reference pages |
+| `references/docs/line-mini-app/` | LINE Mini App guides |
+| `references/reference/line-mini-app/` | LINE Mini App reference pages |
 
 ## Troubleshooting Ladder
 - **HTTP 401**: Check Channel Access Token (Is it expired? Is it a Long-lived token?).
