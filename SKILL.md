@@ -1,3 +1,8 @@
+---
+name: line-docs-skill
+description: Use when building on the LINE Platform or troubleshooting LINE Developers features such as Messaging API, LIFF, LINE Login, and LINE Mini App workflows
+---
+
 # LINE Developers Skill
 
 Knowledge and specialized workflows for building on the [LINE Platform](https://developers.line.biz/en/). This skill provides deep access to the LINE Messaging API, LIFF, LINE Login, and related developer tools.
