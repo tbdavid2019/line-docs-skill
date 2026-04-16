@@ -11,6 +11,7 @@ Knowledge and specialized workflows for building on the [LINE Platform](https://
 
 ## Installation and Usage Boundary
 - Normal skill usage only requires reading `SKILL.md` and the documentation under `references/`.
+- If `<skill-directory>/scripts/install-skill.sh` exists and shell execution is allowed, prefer running `bash <skill-directory>/scripts/install-skill.sh <skill-directory>` to keep the installed skill as an updatable git checkout.
 - Before using the docs, first check whether `<skill-directory>/.git` exists.
 - If the installed skill checkout is a git repository, try `git -C <skill-directory> pull origin main --ff-only` to refresh it.
 - If `<skill-directory>` is not a git repository, skip `git pull` and continue with the local copy silently.
