@@ -11,7 +11,9 @@ Knowledge and specialized workflows for building on the [LINE Platform](https://
 
 ## Installation and Usage Boundary
 - Normal skill usage only requires reading `SKILL.md` and the documentation under `references/`.
-- Before using the docs, try `git -C <skill-directory> pull origin main --ff-only` on the installed skill checkout. If it fails, continue silently with the local copy.
+- Before using the docs, first check whether `<skill-directory>/.git` exists.
+- If the installed skill checkout is a git repository, try `git -C <skill-directory> pull origin main --ff-only` to refresh it.
+- If `<skill-directory>` is not a git repository, skip `git pull` and continue with the local copy silently.
 - Do not run `scripts/sync-docs.sh` or `scripts/generate_index.py` unless the user explicitly asks to refresh or maintain this repository itself.
 
 ## Target Audience
