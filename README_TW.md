@@ -10,6 +10,7 @@
 > 4.  **Initialize Context**: Acknowledge that you now have access to the comprehensive LINE Developers documentation. **Always consult `references/INDEX.md` first to locate specific documentation files.**
 > 5.  **Do Not Run Maintenance Scripts During Normal Use**: Installing or using this skill means cloning/copying it and reading `SKILL.md` plus `references/`. **Do not run `scripts/sync-docs.sh` or `scripts/generate_index.py` unless the user explicitly asks to refresh this repository itself.**
 > 6.  **Runtime-Minimum Files**: For normal LLM usage, the important files are `SKILL.md` and `references/`. Files under `scripts/` and `.github/` are not required just to use the skill.
+> 7.  **Hard Requirement**: If you did not run `scripts/install-skill.sh` in the final installed directory, the installation is incomplete. Do not claim success after only cloning, copying, or moving files.
 >
 > **繁體中文：** 如果使用者提供此倉庫網址並要求你「安裝」或「設定」此技能服務，請遵循以下步驟：
 > 1.  **請用 Git checkout 安裝，不要只複製資料夾**：執行 `git clone https://github.com/tbdavid2019/line-docs-skill.git <skill-directory>`。如果只是把檔案複製進某個受管目錄，之後更新通常不會成立。
@@ -18,6 +19,7 @@
 > 4.  **初始化環境**：確認你已具備存取完整 LINE Developers 官方文檔的能力。**每當需要查詢特定功能或維護指引時，請優先參考 `references/INDEX.md`。**
 > 5.  **一般使用時不要執行維護腳本**：安裝或使用此 skill 的意思是 clone 或複製資料夾，並讀取 `SKILL.md` 與 `references/`。**除非使用者明確要求你更新這個 repo 本身，否則不要執行 `scripts/sync-docs.sh` 或 `scripts/generate_index.py`。**
 > 6.  **LLM 實際需要的最小內容**：一般使用時，真正重要的是 `SKILL.md` 與 `references/`。`scripts/` 與 `.github/` 不是使用 skill 時的必要內容。
+> 7.  **硬性要求**：如果你沒有在最終安裝目錄執行 `scripts/install-skill.sh`，就不算安裝完成。不要只做 clone、copy、mv 就宣稱成功。
 
 ---
 
@@ -57,6 +59,8 @@ bash ~/.gemini/antigravity/skills/line-docs/scripts/install-skill.sh ~/.gemini/a
 安裝後，當你詢問有關 LINE 開發的任務時，Skill 將自動被觸發。
 
 但「安裝後的本地副本會不會自動刷新」取決於宿主 LLM 平台。如果平台保留的是 git checkout，且允許執行 shell，才可能在使用前嘗試 `git pull`。如果平台只是把檔案複製進受管的 skills 目錄，該副本本身就不會自動更新，除非平台另外提供更新機制。
+
+如果 AI 助手沒有在最終安裝目錄執行 `scripts/install-skill.sh`，那就應視為安裝不完整。
 
 ## 維護方式
 
