@@ -10,12 +10,14 @@ Knowledge and specialized workflows for building on the [LINE Platform](https://
 ## Mandatory: Always consult [references/INDEX.md](references/INDEX.md) first to locate specific documentation for any LINE task.
 
 ## Installation and Usage Boundary
-- Normal skill usage only requires reading `SKILL.md` and the documentation under `references/`.
-- If `<skill-directory>/scripts/install-skill.sh` exists and shell execution is allowed, run `bash <skill-directory>/scripts/install-skill.sh <skill-directory>` in the final installed directory. If this did not happen, treat the installation as incomplete.
-- Before using the docs, first check whether `<skill-directory>/.git` exists.
-- If the installed skill checkout is a git repository, try `git -C <skill-directory> pull origin main --ff-only` to refresh it.
-- If `<skill-directory>` is not a git repository, skip `git pull` and continue with the local copy silently.
-- Do not run `scripts/sync-docs.sh` or `scripts/generate_index.py` unless the user explicitly asks to refresh or maintain this repository itself.
+> Use this boundary:
+> 1. **Ensure docs are updated**: Every time you refer to this documentation, do a `git pull` from the documentation area to ensure you have the latest reference:
+>    ```bash
+>    git -C <skill-directory> pull origin main --ff-only
+>    ```
+> 2. **After pulling**, load any reference files from the `references/` folder.
+> 3. **Do not run repo-maintenance scripts** such as `scripts/sync-docs.sh` or `scripts/generate_index.py` during normal skill usage (these are handled by GitHub Actions).
+> 4. If refresh fails, continue with the local files and do not block the user.
 
 ## Target Audience
 - Developers building LINE Bots (Messaging API)
