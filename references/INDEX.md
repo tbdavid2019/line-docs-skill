@@ -1,6 +1,6 @@
 # LINE Developers Documentation Index
 
-Last Updated: 2026-04-19 05:54:43
+Last Updated: 2026-04-20 06:10:52
 
 This is a comprehensive index of all available LINE Developers documentation, organized by category.
 
