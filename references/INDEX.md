@@ -1,7 +1,5 @@
 # LINE Developers Documentation Index
 
-Last Updated: 2026-04-20 06:10:52
-
 This is a comprehensive index of all available LINE Developers documentation, organized by category.
 
 ## Docs > Basics > Channel Access Token
