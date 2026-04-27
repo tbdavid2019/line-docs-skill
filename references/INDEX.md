@@ -42,7 +42,7 @@ This is a comprehensive index of all available LINE Developers documentation, or
 - [Opening a LIFF app](docs/liff/opening-liff-app/index.html.md)
 
 ## Docs > Liff > Overview
-- [LINE Front-end Framework (LIFF)](docs/liff/overview/index.html.md)
+- [LIFF overview](docs/liff/overview/index.html.md)
 
 ## Docs > Liff > Pluggable Sdk
 - [Pluggable SDK](docs/liff/pluggable-sdk/index.html.md)
@@ -159,7 +159,7 @@ This is a comprehensive index of all available LINE Developers documentation, or
 - [LINE SDK for Android overview](docs/line-login-sdks/android-sdk/overview/index.html.md)
 
 ## Docs > Line Login Sdks > Android Sdk > Release Notes
-- [Release notes](docs/line-login-sdks/android-sdk/release-notes/index.html.md)
+- [Release notes for LINE SDK for Android](docs/line-login-sdks/android-sdk/release-notes/index.html.md)
 
 ## Docs > Line Login Sdks > Android Sdk > Try Line Login
 - [Trying the sample app](docs/line-login-sdks/android-sdk/try-line-login/index.html.md)
@@ -168,7 +168,7 @@ This is a comprehensive index of all available LINE Developers documentation, or
 - [LINE SDK for Flutter](docs/line-login-sdks/flutter-sdk/index.html.md)
 
 ## Docs > Line Login Sdks > Ios Sdk > Release Notes
-- [Release notes](docs/line-login-sdks/ios-sdk/release-notes/index.html.md)
+- [Release notes for LINE SDK for iOS](docs/line-login-sdks/ios-sdk/release-notes/index.html.md)
 
 ## Docs > Line Login Sdks > Ios Sdk > Swift > Error Handling
 - [Handling errors](docs/line-login-sdks/ios-sdk/swift/error-handling/index.html.md)
@@ -213,7 +213,7 @@ This is a comprehensive index of all available LINE Developers documentation, or
 - [Setting up your project](docs/line-login-sdks/unity-sdk/project-setup/index.html.md)
 
 ## Docs > Line Login Sdks > Unity Sdk > Release Notes
-- [Release notes](docs/line-login-sdks/unity-sdk/release-notes/index.html.md)
+- [Release notes for LINE SDK for Unity](docs/line-login-sdks/unity-sdk/release-notes/index.html.md)
 
 ## Docs > Line Login Sdks > Unity Sdk > Try Line Login
 - [Trying the starter app](docs/line-login-sdks/unity-sdk/try-line-login/index.html.md)
@@ -309,10 +309,10 @@ This is a comprehensive index of all available LINE Developers documentation, or
 - [The differences between native apps and LINE MINI Apps](docs/line-mini-app/discover/native-mini/index.html.md)
 
 ## Docs > Line Mini App > Discover > Specifications
-- [Specifications](docs/line-mini-app/discover/specifications/index.html.md)
+- [LINE MINI App specifications](docs/line-mini-app/discover/specifications/index.html.md)
 
 ## Docs > Line Mini App > Discover > Ui Components
-- [LINE MINI App UI Components](docs/line-mini-app/discover/ui-components/index.html.md)
+- [LINE MINI App UI components](docs/line-mini-app/discover/ui-components/index.html.md)
 
 ## Docs > Line Mini App > In App Purchase > Iap Guidelines
 - [In-app purchase development guidelines](docs/line-mini-app/in-app-purchase/iap-guidelines/index.html.md)
@@ -606,7 +606,7 @@ This is a comprehensive index of all available LINE Developers documentation, or
 - [Provider page](docs/partner-docs/provider-page/index.html.md)
 
 ## Reference > Liff
-- [LIFF v2 API reference](reference/liff/index.html.md)
+- [LIFF API reference](reference/liff/index.html.md)
 
 ## Reference > Liff Server
 - [Server API](reference/liff-server/index.html.md)
