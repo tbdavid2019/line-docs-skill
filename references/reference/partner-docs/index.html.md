@@ -167,7 +167,7 @@ All messages sent from a specific user can display "Read".
 
 **Use the new endpoint to mark as read**
 
-The Mark as read API (old) remains available for use. However, if you're implementing functionality to mark messages as read from users going forward, use the Messaging API's [Mark messages as read](https://developers.line.biz/en/reference/messaging-api/#mark-as-read) endpoint. The "Mark messages as read" endpoint requires no application and can be used in conjunction with chat feature.
+The Mark as read API (old) remains available for use. However, if you're implementing functionality to mark messages as read from users going forward, use the Messaging API's [Mark messages as read](https://developers.line.biz/en/reference/messaging-api/#mark-as-read) endpoint. The "Mark messages as read" endpoint requires no application and can be used in conjunction with the chat feature.
 
 <!-- tip end -->
 

@@ -2,6 +2,14 @@
 
 Notice for corporate customers. See also the [News](https://developers.line.biz/en/news/).
 
+2026/05/18
+
+## We'll stop accepting new applications for the Mark as read API (old) at the end of October 2026 
+
+We'll stop accepting new applications for the [Mark as read API (old)](https://developers.line.biz/en/docs/partner-docs/mark-as-read/) at the end of October 2026. LINE Official Accounts that are currently using the Mark as read API (old) can continue to use it after new applications are no longer accepted.
+
+We're considering deprecating the Mark as read API (old). If you provide a system that incorporates the Mark as read API (old), consider migrating to the Messaging API's [Mark messages as read](https://developers.line.biz/en/reference/messaging-api/#mark-as-read) endpoint. The "Mark messages as read" endpoint requires no application and can be used in conjunction with the chat feature.
+
 2026/02/19
 
 ## Changes to some error responses in the Mission Sticker API 
