@@ -15855,15 +15855,15 @@ _Error response example_
 
 <!-- tab end -->
 
-## Bot 
+## LINE Official Account (bot) 
 
-You can obtain basic information on the LINE Official Account's bots.
+You can obtain basic information on the LINE Official Account (bot).
 
-### Get bot info 
+### Get LINE Official Account (bot) info 
 
 Endpoint: `GET` `https://api.line.me/v2/bot/info`
 
-Gets a bot's basic information.
+Gets basic information on the LINE Official Account (bot).
 
 _Example request_
 
@@ -15903,7 +15903,7 @@ userId
 
 String
 
-Bot's user ID
+User ID of the LINE Official Account (bot).
 
 <!-- parameter end -->
 <!-- parameter start -->
@@ -15912,7 +15912,7 @@ basicId
 
 String
 
-Bot's basic ID
+Basic ID of the LINE Official Account (bot).
 
 <!-- parameter end -->
 <!-- parameter start (props: annotation="Not always included") -->
@@ -15921,7 +15921,7 @@ premiumId
 
 String
 
-Bot's [premium ID](https://developers.line.biz/en/glossary/#premium-id). Not included in the response if the premium ID isn't set.
+[Premium ID](https://developers.line.biz/en/glossary/#premium-id) of the LINE Official Account (bot). Not included in the response if the premium ID isn't set.
 
 <!-- parameter end -->
 <!-- parameter start -->
@@ -15930,7 +15930,7 @@ displayName
 
 String
 
-Bot's display name
+Display name of the LINE Official Account (bot).
 
 <!-- parameter end -->
 <!-- parameter start (props: annotation="Not always included") -->
@@ -15939,7 +15939,7 @@ pictureUrl
 
 String
 
-Profile image URL. "https" image URL. Not included in the response if the bot doesn't have a profile image.
+Profile image URL. "https" image URL. Not included in the response if the LINE Official Account (bot) doesn't have a profile image.
 
 <!-- parameter end -->
 <!-- parameter start -->

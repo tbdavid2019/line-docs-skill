@@ -285,12 +285,12 @@ Implement the module so that there's no conflict in the information managed by t
 
 You can obtain information about each LINE Official Account that is attached to a module channel by using the following APIs:
 
-- [Get bot information](https://developers.line.biz/en/docs/partner-docs/module-technical-using-messaging-api/#get-bot-info)
+- [Get LINE Official Account (bot) information](https://developers.line.biz/en/docs/partner-docs/module-technical-using-messaging-api/#get-bot-info)
 - [Get a list of bots to which the module is attached](https://developers.line.biz/en/docs/partner-docs/module-technical-using-messaging-api/#get-multiple-bot-info)
 
-### Get bot information 
+### Get LINE Official Account (bot) information 
 
-Gets basic information about the bots of LINE Official Accounts that have attached module channels. For more information, see [Get bot info](https://developers.line.biz/en/reference/messaging-api/#get-bot-info) in the Messaging API documentation.
+Gets basic information about the bots of LINE Official Accounts that have attached module channels. For more information, see [Get LINE Official Account (bot) info](https://developers.line.biz/en/reference/messaging-api/#get-bot-info) in the Messaging API documentation.
 
 Also, specify this content in the request header:
 

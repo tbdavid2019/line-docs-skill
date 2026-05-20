@@ -54,9 +54,9 @@ There are three ways to minimize a LIFF browser:
 
 ### Tapping an option from the action button 
 
-Tap the **Minimize browser** option after opening the [multi-tab view](https://developers.line.biz/en/docs/liff/overview/#multi-tab-view) from the [action button](https://developers.line.biz/en/docs/liff/overview/#action-button).
+Tap the **Minimize browser** option after opening the dropdown menu from the [action button](https://developers.line.biz/en/docs/liff/overview/#action-button).
 
-![LIFF browser minimization (tapping an action button option)](https://developers.line.biz/media/liff/minimizing-liff-app/tap-action-button-option-en.png)
+![](https://developers.line.biz/media/line-mini-app/discover/mini-header-action-button-tap-en.png)
 
 ### Tapping an in-app alert 
 
@@ -69,6 +69,12 @@ Tap an in-app alert.
 Swipe a LIFF browser down.
 
 ![LIFF browser minimization (swiping a LIFF browser)](https://developers.line.biz/media/liff/minimizing-liff-app/swipe-liff-browser-en.png)
+
+### Tapping the option from the action button (LINE version earlier than 26.7.0) 
+
+Tap the **Minimize browser** option after opening the [multi-tab view](https://developers.line.biz/en/docs/liff/overview/#multi-tab-view) from the [action button](https://developers.line.biz/en/docs/liff/overview/#action-button).
+
+![LIFF browser minimization (tapping the action button option)](https://developers.line.biz/media/liff/minimizing-liff-app/tap-action-button-option-en.png)
 
 ## Maximizing a LIFF browser 
 

@@ -127,7 +127,7 @@ For example, a webhook event object containing the following message event will 
 }
 ```
 
-You can check the user ID of the bot in the `destination` property in the [request body of the webhook](https://developers.line.biz/en/reference/messaging-api/#request-body) and in the `userId` property which can be obtained using the [Get bot info](https://developers.line.biz/en/reference/messaging-api/#get-bot-info) endpoint.
+You can check the user ID of the bot in the `destination` property in the [request body of the webhook](https://developers.line.biz/en/reference/messaging-api/#request-body) and in the `userId` property which can be obtained using the [Get LINE Official Account (bot) info](https://developers.line.biz/en/reference/messaging-api/#get-bot-info) endpoint.
 
 ### Other webhook events 
 
