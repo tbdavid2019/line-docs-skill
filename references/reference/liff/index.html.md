@@ -1584,13 +1584,12 @@ Gets the current user's access token.
 
 You can use the access token obtained with this API to send user data from the LIFF app to the server. For more information, see [Using user data in LIFF apps and servers](https://developers.line.biz/en/docs/liff/using-user-profile/) in the LIFF documentation.
 
-<!-- note start -->
+#### Access token validity period 
 
-**Validity period of the access token**
+An access token is valid for 12 hours after it is issued. However, even within this validity period, the access token may be revoked due to user actions.
 
-The access token is valid for 12 hours after being issued. When the user closes the LIFF app, the access token may be revoked even if it hasn't expired yet. For more information, see [Behavior when closing the LIFF app](https://developers.line.biz/en/docs/liff/developing-liff-apps/#behavior-when-closing-liff-app) in the LIFF documentation.
-
-<!-- note end -->
+- When the user closes the LIFF app, the access token may be revoked. For more information, see [Behavior when closing the LIFF app](https://developers.line.biz/en/docs/liff/developing-liff-apps/#behavior-when-closing-liff-app) in the LIFF documentation.
+- In a LINE MINI App where the "[Channel consent simplification](https://developers.line.biz/en/docs/line-mini-app/develop/channel-consent-simplification/#what-is-channel-consent-simplification)" feature is enabled, granting additional permissions from the verification screen refreshes the access token and revokes the previously issued access token. For more information, see [Request permissions other than the `openid` scope on the verification screen](https://developers.line.biz/en/docs/line-mini-app/develop/channel-consent-simplification/#request-permissions-other-than-openid) in the LINE MINI App documentation.
 
 <!-- tip start -->
 

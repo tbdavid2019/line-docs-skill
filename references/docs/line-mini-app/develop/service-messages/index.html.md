@@ -174,6 +174,8 @@ The number of characters in the key values is counted in [grapheme cluster](http
 
 Here are the steps to sending a service message for the first time from the LINE MINI App after a user action:
 
+This is an image diagram showing how to issue a service notification token, using a channel access token and an access token obtained by [liff.getAccessToken()](https://developers.line.biz/en/reference/liff/#get-access-token) (hereafter called "LIFF access token"), to send a service message. In this image, a [stateless channel access token](https://developers.line.biz/en/docs/basics/channel-access-token/#stateless-channel-access-token) is used as the channel access token.
+
 <!-- note start -->
 
 **Use of stateless channel access tokens is recommended**
@@ -183,8 +185,6 @@ Here are the steps to sending a service message for the first time from the LINE
 When developing LINE MINI Apps, either [stateless channel access tokens](https://developers.line.biz/en/docs/basics/channel-access-token/#stateless-channel-access-token) or [short-lived channel access tokens](https://developers.line.biz/en/docs/basics/channel-access-token/#short-lived-channel-access-token) can be used. Stateless channel access tokens are recommended among those two. Stateless channel access tokens have an unlimited number of issuances, so there is no need for the application to manage the token lifecycle.
 
 <!-- note end -->
-
-This is an image diagram showing how to issue a service notification token, using a channel access token and an access token obtained by [liff.getAccessToken()](https://developers.line.biz/en/reference/liff/#get-access-token) (hereafter called "LIFF access token"), to send a service message. In this image, a [stateless channel access token](https://developers.line.biz/en/docs/basics/channel-access-token/#stateless-channel-access-token) is used as the channel access token.
 
 ![relationship of tokens](https://developers.line.biz/media/line-mini-app/mini-illust-01-en.png)
 
@@ -196,7 +196,7 @@ This is an image diagram showing how to issue a service notification token, usin
 
 1. [Issue a service notification token](https://developers.line.biz/en/reference/line-mini-app/#issue-notification-token).
 
-   The channel access token obtained in step 3 and the LIFF access token obtained in step 1 are used. Note that if the user closes the LINE MINI App, the LIFF access token will be revoked even if it's still valid.
+   The channel access token obtained in step 3 and the LIFF access token obtained in step 1 are used.
 
    ```java
    final OkHttpClient notifierApiClient = new OkHttpClient().newBuilder().build();
@@ -212,6 +212,16 @@ This is an image diagram showing how to issue a service notification token, usin
    String notificationToken = notificationTokenResponse.getNotificationToken();
    int tokenRemainingCount = notificationTokenResponse.getRemainingCount();
    ```
+
+   <!-- note start -->
+
+   **LIFF access token validity period**
+
+   A LIFF access token is valid for 12 hours after it is issued. However, even within this validity period, the LIFF access token may be revoked due to user actions. Therefore, be careful about when you obtain the LIFF access token.
+   - When the user closes the LINE MINI App, the LIFF access token may be revoked. For more information, see [Behavior when closing the LIFF app](https://developers.line.biz/en/docs/liff/developing-liff-apps/#behavior-when-closing-liff-app) in the LIFF documentation.
+   - When the "[Channel consent simplification](https://developers.line.biz/en/docs/line-mini-app/develop/channel-consent-simplification/#what-is-channel-consent-simplification)" feature is enabled, granting additional permissions from the verification screen refreshes the LIFF access token and revokes the previously issued LIFF access token. For more information, see [Request permissions other than the `openid` scope on the verification screen](https://developers.line.biz/en/docs/line-mini-app/develop/channel-consent-simplification/#request-permissions-other-than-openid).
+
+   <!-- note end -->
 
 1. [Sending a service message](https://developers.line.biz/en/reference/line-mini-app/#send-service-message) for the first time.
 
