@@ -108,32 +108,10 @@ For LINE MINI Apps, changes that do not involve configuration updates in the LIN
 
 ## FAQ 
 
-### Q: Unlike native apps, you can't add an icon to the device’s home screen, right? 
+For more information, see the following FAQ entries:
 
-A: By using the browser’s shortcut-adding feature, a shortcut icon can be added to the device’s home screen. As a result, frequently used services—such as membership cards or takeout ordering—can be accessed directly again from the shortcut icon without opening LINE.
-
-\* The feature that allows the addition of a shortcut to a LINE MINI App on the home screen is available only for verified MINI Apps. For more information, see [Introducing LINE MINI App](https://developers.line.biz/en/docs/line-mini-app/discover/introduction/).
-
-![](https://developers.line.biz/media/basics/native-mini/en/native-mini-img-5.webp)
-
-### Q: If we provide services through LINE MINI Apps or a LINE Official Account, won’t notifications cost money? 
-
-A: No. Messages sent from a LINE Official Account are charged based on the number of messages delivered, in accordance with the [LINE Official Account pricing plans](https://developers.line.biz/en/docs/messaging-api/pricing/). However, with LINE MINI Apps, you can use the service message feature to send the notifications required for service delivery reliably and at no cost.
-
-\* The service message feature is available only for verified MINI Apps.
-
-![](https://developers.line.biz/media/basics/native-mini/en/native-mini-img-6.webp)
-
-### Q: LINE isn’t widely used by users outside of Japan, so LINE MINI Apps can’t be used for services that may be accessed by users outside of Japan, right? 
-
-A: No. When non-LINE users in markets with low LINE usage—such as markets other than Japan, Thailand, and Taiwan—attempt to launch a LINE MINI App, a dedicated landing page is displayed, allowing the service to be provided through a web browser. As a result, international visitors to Japan who do not use LINE can access LINE MINI App services via a web browser without installing the LINE app.
-
-### Q: Is it possible to change from a web application or a LIFF app to LINE MINI Apps? 
-
-A: Web applications can be converted into LINE MINI Apps. For more information, see [Implementing web apps in operation as LINE MINI Apps](https://developers.line.biz/en/docs/line-mini-app/develop/web-to-mini-app/). However, LIFF apps created under a LINE Login channel cannot be migrated to a LINE MINI App channel to become either an unverified MINI App or a verified MINI App. Unverified MINI Apps can be published without undergoing a review process. When there is uncertainty about whether to create a LIFF app or a LINE MINI App, or when there is a possibility that the app may become a verified MINI App in the future, creating an unverified MINI App is recommended.
-
-### Q: Is there any benefit to using LINE MINI Apps alongside an existing native app? 
-
-A: Due to their low barrier to use, an increasing number of companies are adopting LINE MINI Apps and LINE Official Accounts to engage customers with low to medium loyalty, while continuing to operate native apps as the service channel for highly loyal customers. For example, in the case of a membership card service, offering the service through a native app requires users to install the app and complete membership registration, which can be a significant hurdle. With LINE, however, a card can be issued in just a few taps, making membership registration unnecessary. In other words, because services can be delivered after removing many of the typical barriers, LINE can be effectively used as an entry point for service experiences aimed at light customers.
-
-![](https://developers.line.biz/media/basics/native-mini/en/native-mini-img-7.webp)
+- [Can users add a LINE MINI App icon to their device's home screen?](https://developers.line.biz/en/faq/#can-i-add-line-mini-app-icon-to-home-screen)
+- [Does it cost money to send notifications to users from LINE MINI Apps?](https://developers.line.biz/en/faq/#does-it-cost-money-to-send-notifications-with-line-mini-apps)
+- [Can users access LINE MINI Apps without installing the LINE app?](https://developers.line.biz/en/faq/#can-users-who-do-not-use-line-use-line-mini-apps)
+- [Can I migrate a web app or LIFF app to a LINE MINI App?](https://developers.line.biz/en/faq/#can-i-migrate-a-web-app-or-liff-app-to-line-mini-app)
+- [Is there any benefit to using LINE MINI Apps alongside an existing native app?](https://developers.line.biz/en/faq/#is-there-any-benefit-to-using-line-mini-apps-with-native-app)
