@@ -341,6 +341,9 @@ This is a comprehensive index of all available LINE Developers documentation, or
 ## Docs > Line Mini App > Quickstart
 - [Get started with LINE MINI App](docs/line-mini-app/quickstart/index.html.md)
 
+## Docs > Line Mini App > Service > Business Manager Link
+- [Link a LINE MINI App channel to a Business Manager organization](docs/line-mini-app/service/business-manager-link/index.html.md)
+
 ## Docs > Line Mini App > Service > Line Mini App Ads
 - [Place ads in LINE MINI Apps](docs/line-mini-app/service/line-mini-app-ads/index.html.md)
 
