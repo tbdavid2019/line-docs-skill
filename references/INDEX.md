@@ -74,6 +74,9 @@ This is a comprehensive index of all available LINE Developers documentation, or
 ## Docs > Line Developers Console > Best Practices For Provider And Channel Management
 - [Best practices for provider and channel management](docs/line-developers-console/best-practices-for-provider-and-channel-management/index.html.md)
 
+## Docs > Line Developers Console > Delete Developer Account
+- [Delete your developer account](docs/line-developers-console/delete-developer-account/index.html.md)
+
 ## Docs > Line Developers Console > Login Account
 - [Log in to the LINE Developers Console](docs/line-developers-console/login-account/index.html.md)
 
