@@ -261,7 +261,7 @@ This is a comprehensive index of all available LINE Developers documentation, or
 - [LINE MINI App authorization flow](docs/line-mini-app/develop/channel-consent-simplification/index.html.md)
 
 ## Docs > Line Mini App > Develop > Configure Console
-- [Managing LINE MINI App settings on LINE Developers Console](docs/line-mini-app/develop/configure-console/index.html.md)
+- [Settings displayed to LINE MINI App users](docs/line-mini-app/develop/configure-console/index.html.md)
 
 ## Docs > Line Mini App > Develop > Custom Path
 - [Configuring Custom Path](docs/line-mini-app/develop/custom-path/index.html.md)
