@@ -1,5 +1,11 @@
 venv/
 .tmp_repo/
 *.pyc
+__pycache__/
+.env
+.env.*
+!.env.example
+*.key
+*.pem
 .idea/
 .DS_Store

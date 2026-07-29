@@ -1,0 +1,48 @@
+name: Validate Skill
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-skill-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        # actions/checkout v5
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        # actions/setup-python v6
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1
+        with:
+          python-version: "3.12"
+
+      - name: Check script syntax
+        run: |
+          bash -n scripts/sync-docs.sh scripts/install-skill.sh
+          python3 -m py_compile \
+            scripts/generate_index.py \
+            scripts/run_skill_evals.py \
+            scripts/validate_repository.py \
+            scripts/write_sync_manifest.py
+
+      - name: Run tests
+        run: python3 -m unittest discover -s tests -v
+
+      - name: Validate repository and routing contract
+        run: |
+          python3 scripts/validate_repository.py
+          python3 scripts/run_skill_evals.py
