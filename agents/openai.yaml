@@ -1,0 +1,4 @@
+interface:
+  display_name: "LINE Developers Docs"
+  short_description: "Official LINE docs routing and diagnostics"
+  default_prompt: "Use $line-docs-skill to diagnose this LINE Platform issue with the synchronized official documentation."
