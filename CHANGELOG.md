@@ -2,6 +2,36 @@
 
 All notable changes to this repository are documented in this file.
 
+## 2026-07-29 — Runtime distribution correction
+
+This section supersedes the same-day installer model described below.
+
+### Corrected
+
+- Split the repository into two responsibilities: `main` is maintainer source,
+  while the generated `skill` branch is the only end-user installation target.
+- Removed `install-skill.sh`. Users now clone or update the `skill` branch with
+  Git and never execute repository Python or maintenance scripts.
+- Added an allowlist-based runtime package builder. Published Skills contain
+  only `SKILL.md`, `agents/`, `references/`, `LICENSE`, and `NOTICE.md`.
+- Added contract coverage proving the package excludes Python, shell scripts,
+  tests, workflows, evals, maintainer docs, README files, and changelog.
+- Added automated `skill` branch publication after validated `main` pushes and
+  after the daily documentation synchronization workflow. This is necessary
+  because pushes made by one GitHub Actions workflow do not start another
+  workflow automatically.
+- Updated both READMEs and `SKILL.md` so human and LLM instructions never ask an
+  installed Skill to find or run maintainer code.
+- Updated the maintenance specification to document the source/distribution
+  boundary and the zero-Python end-user requirement.
+
+### Verification
+
+- The current suite contains 11 deterministic tests after removing obsolete
+  local-installer tests and adding the runtime package contract.
+- The release is complete only after `main` CI succeeds and the generated
+  `skill` branch is confirmed to contain the runtime allowlist.
+
 ## 2026-07-29
 
 ### Added

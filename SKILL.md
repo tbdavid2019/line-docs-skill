@@ -22,17 +22,20 @@ with current, task-specific evidence and a concrete verification step.
 ## Freshness Boundary
 
 1. Read `references/SYNC_MANIFEST.json` when freshness or provenance matters.
-2. Do not run `git pull` or mutate the installed skill during ordinary use.
-3. If the user explicitly asks to update a Git checkout, run:
+2. Treat this installed directory as the published runtime Skill, not as the
+   maintainer source repository.
+3. Do not run `git pull` or mutate the installed Skill during ordinary use.
+4. If the user explicitly asks to update this Git checkout, run:
 
    ```bash
-   bash <skill-directory>/scripts/install-skill.sh <skill-directory>
+   git -C <skill-directory> pull --ff-only origin skill
    ```
 
-4. If the installation is a copied snapshot without `.git`, explain that the
+5. If the installation is a copied snapshot without `.git`, explain that the
    host must reinstall or replace it. Do not claim it auto-updates.
-5. Run `scripts/sync-docs.sh` only when the user explicitly asks to maintain
-   this source repository.
+6. Never look for or invoke Python, synchronization, publication, test, or
+   maintenance scripts from the installed Skill. Those exist only in GitHub's
+   maintainer workflow and are not runtime dependencies.
 
 ## Safety Boundary
 

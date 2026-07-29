@@ -17,34 +17,58 @@ Manager 說明中心的完整鏡像；上游也明確說明，LINE Developers �
   repository。
 - 同步流程會先建立 staging exact mirror，完成索引及驗證後才替換
   `references/`。
+- 驗證通過後，GitHub Actions 會發布乾淨的 `skill` 分支。Python、測試、
+  workflow 與維護腳本只留在 `main`。
 - [`references/SYNC_MANIFEST.json`](references/SYNC_MANIFEST.json) 記錄上游
   commit、來源、語言、文件數與同步時間。
-- 安裝副本只有在仍是 Git checkout，且宿主允許明確執行更新時才能更新。
-  被宿主複製的 snapshot 不會自動更新。
+
+```text
+LINE 官方文件 → main 上的 GitHub Actions → 驗證 → skill 分支
+                                                → LLM 安裝的 Skill
+```
 
 ## 安裝
 
-請安裝到 LLM 宿主所設定的 skills 目錄：
+請把專用的 runtime 分支安裝到 LLM 宿主所設定的 skills 目錄：
 
 ```bash
-git clone https://github.com/tbdavid2019/line-docs-skill.git <skill-directory>
-bash <skill-directory>/scripts/install-skill.sh <skill-directory>
+git clone --branch skill --single-branch https://github.com/tbdavid2019/line-docs-skill.git <skill-directory>
 ```
 
-第二個指令會驗證 checkout，並且只允許 fast-forward 更新。遇到 dirty、
-divergent、來源不符或非 Git 目標時會拒絕覆寫。
+這個分支只包含：
 
-日後更新：
+- `SKILL.md`
+- `agents/`
+- `references/`
+- `LICENSE`
+- `NOTICE.md`
+
+使用者電腦不需要安裝 Python、Python package、相依套件或任何維護腳本。
+不要把 `main` 分支安裝成 LLM Skill。
+
+日後若要明確更新 Git checkout：
 
 ```bash
-bash <skill-directory>/scripts/install-skill.sh <skill-directory>
+git -C <skill-directory> pull --ff-only origin skill
 ```
 
 如果宿主是用複製檔案的方式安裝 skill，請使用該宿主的重新安裝／更新功能。
 沒有 `.git` 就不能期待 `git pull` 生效。
 
-安裝後由宿主載入 `SKILL.md`。一般使用不會執行 repository 維護腳本，也不會
-暗中修改已安裝的 skill。
+安裝後由宿主載入 `SKILL.md`。一般使用永遠不會執行 repository 維護程式，
+也不會暗中修改已安裝的 Skill。
+
+### 給 LLM 的安裝提示詞
+
+可直接把以下指令交給 agent：
+
+```text
+請把 tbdavid2019/line-docs-skill 安裝到你設定的 skills 目錄。
+只用 --single-branch clone `skill` 分支。不要 clone `main`、不要執行
+Python、不要安裝 package，也不要執行維護腳本。安裝後確認 tracked 的
+runtime 頂層內容只有 SKILL.md、agents、references、LICENSE、NOTICE.md，
+並回報 references/SYNC_MANIFEST.json 內的 upstream commit。
+```
 
 ## 對 LLM 的引導
 
@@ -67,13 +91,15 @@ bash <skill-directory>/scripts/install-skill.sh <skill-directory>
 
 ## Repository 維護
 
-以下指令只用於維護來源 repository，不屬於一般 Skill 使用流程：
+`main` 是維護者專用的來源分支。以下 Python 與 shell 工具只在 GitHub
+Actions／維護環境執行，不會出現在使用者安裝的 `skill` 分支：
 
 ```bash
 bash scripts/sync-docs.sh
 python3 -m unittest discover -s tests -v
 python3 scripts/validate_repository.py
 python3 scripts/run_skill_evals.py
+bash scripts/build-skill-package.sh <new-output-directory>
 ```
 
 架構與驗收條件請參考

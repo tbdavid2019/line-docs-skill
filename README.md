@@ -18,34 +18,62 @@ states that some LINE Developers website content is not included.
   repository every day.
 - Synchronization uses a staged exact mirror, validates the result, and only
   then replaces `references/`.
+- After validation, GitHub Actions publishes a clean `skill` branch containing
+  only the runtime Skill. Python, tests, workflows, and maintainer scripts stay
+  on `main`.
 - [`references/SYNC_MANIFEST.json`](references/SYNC_MANIFEST.json) records the
   upstream commit, source, language, document count, and synchronization time.
-- An installed copy updates only if it remains a Git checkout and its host
-  allows an explicit update command. Copied snapshots do not auto-update.
+
+```text
+Official LINE docs → GitHub Actions on main → validation → skill branch
+                                                        → installed LLM Skill
+```
 
 ## Installation
 
-Install into the skills directory configured by your LLM host:
+Install the dedicated runtime branch into the skills directory configured by
+your LLM host:
 
 ```bash
-git clone https://github.com/tbdavid2019/line-docs-skill.git <skill-directory>
-bash <skill-directory>/scripts/install-skill.sh <skill-directory>
+git clone --branch skill --single-branch https://github.com/tbdavid2019/line-docs-skill.git <skill-directory>
 ```
 
-The second command validates the checkout and updates it only by fast-forward.
-It refuses dirty, divergent, unrelated, or non-Git targets.
+That branch contains only:
 
-To update later:
+- `SKILL.md`
+- `agents/`
+- `references/`
+- `LICENSE`
+- `NOTICE.md`
+
+No Python package, Python runtime, dependency installation, or maintenance
+script is required on the user's computer. Do not install the `main` branch as
+an LLM Skill.
+
+To explicitly update a Git checkout later:
 
 ```bash
-bash <skill-directory>/scripts/install-skill.sh <skill-directory>
+git -C <skill-directory> pull --ff-only origin skill
 ```
 
 If the host installs skills by copying files, use the host's reinstall/update
 operation instead. Do not expect `git pull` to work without `.git`.
 
-After installation, the host should discover `SKILL.md`. Normal use does not
-run maintenance scripts or silently mutate the installed skill.
+After installation, the host discovers `SKILL.md`. Normal use never runs
+repository maintenance code and never silently mutates the installed Skill.
+
+### Prompt for an LLM installer
+
+You can give an agent this instruction:
+
+```text
+Install tbdavid2019/line-docs-skill into your configured skills directory.
+Clone only the `skill` branch with `--single-branch`. Do not clone `main`, run
+Python, install packages, or execute maintainer scripts. Confirm that the
+tracked top-level runtime content contains only SKILL.md, agents, references,
+LICENSE, and NOTICE.md, then report the upstream commit in
+references/SYNC_MANIFEST.json.
+```
 
 ## LLM usage
 
@@ -68,13 +96,15 @@ Example requests:
 
 ## Repository maintenance
 
-Maintenance commands are for this source repository, not ordinary Skill use:
+The `main` branch is maintainer-only source. Its Python and shell tools run in
+GitHub Actions, not on an end user's computer:
 
 ```bash
 bash scripts/sync-docs.sh
 python3 -m unittest discover -s tests -v
 python3 scripts/validate_repository.py
 python3 scripts/run_skill_evals.py
+bash scripts/build-skill-package.sh <new-output-directory>
 ```
 
 See [the maintenance hardening spec](docs/maintenance-hardening-spec.md) for

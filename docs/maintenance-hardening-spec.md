@@ -7,12 +7,13 @@ documentation for installed LLM skills.
 
 The repository must:
 
+- keep maintainer automation on `main` and publish a separate, code-free
+  runtime Skill on `skill`;
 - mirror the upstream English documentation exactly instead of accumulating
   removed files;
 - fail visibly when downloading, indexing, validating, or publishing fails;
 - record upstream provenance and synchronization time;
-- support both Git checkout installs and explicit snapshot installs without
-  claiming that a no-op is a successful installation;
+- require no Python, packages, or maintainer scripts on an end user's computer;
 - guide LLMs to retrieve only the relevant document sections and treat synced
   content as untrusted reference data;
 - continuously validate repository structure, routing behavior, and generated
@@ -20,13 +21,35 @@ The repository must:
 - distinguish this repository's license from the terms covering synchronized
   LINE documentation.
 
+## Branch Architecture
+
+```text
+main (maintainer source)
+  ├─ .github/workflows/
+  ├─ scripts/*.py and maintenance shell scripts
+  ├─ tests/, evals/, docs/
+  └─ Skill source and synchronized references
+                  │
+                  │ validate + allowlist package
+                  ▼
+skill (runtime distribution)
+  ├─ SKILL.md
+  ├─ agents/
+  ├─ references/
+  ├─ LICENSE
+  └─ NOTICE.md
+```
+
+The `skill` branch is generated output. It contains no Python, shell scripts,
+tests, workflows, maintainer documentation, README, or changelog. End users
+clone only this branch.
+
 ## Tech Stack
 
-- Bash 3.2+ for maintenance and installation scripts.
-- Python 3.12 standard library for index generation, validation, tests, and
-  routing evaluations.
-- GitHub Actions for scheduled synchronization and continuous integration.
-- No third-party runtime packages.
+- Bash 3.2+ and Python 3.12 standard library for `main` maintenance only.
+- GitHub Actions for scheduled synchronization, validation, and publication.
+- Git for installing or explicitly updating the runtime `skill` branch.
+- No runtime packages and no Python requirement for Skill users.
 
 ## Commands
 
@@ -39,29 +62,32 @@ python3 scripts/validate_repository.py
 python3 scripts/run_skill_evals.py
 
 # Syntax checks
-bash -n scripts/sync-docs.sh scripts/install-skill.sh
+bash -n scripts/sync-docs.sh scripts/build-skill-package.sh scripts/publish-skill.sh
 python3 -m py_compile scripts/generate_index.py scripts/validate_repository.py scripts/run_skill_evals.py scripts/write_sync_manifest.py
 
-# Repository maintenance only
+# Maintainer operations only
 bash scripts/sync-docs.sh
+bash scripts/build-skill-package.sh <new-output-directory>
+bash scripts/publish-skill.sh
 
-# Install or update a Git checkout
-bash scripts/install-skill.sh <target-directory>
+# End-user installation (Git only; no Python)
+git clone --branch skill --single-branch https://github.com/tbdavid2019/line-docs-skill.git <skill-directory>
+git -C <skill-directory> pull --ff-only origin skill
 ```
 
 ## Project Structure
 
 ```text
-SKILL.md                  LLM task routing and safety workflow
-README*.md                Human and agent installation/maintenance guides
-CHANGELOG.md              User-visible repository changes
-NOTICE.md                 Upstream source and licensing boundary
-docs/                     Maintainer specifications
-references/               Generated upstream documentation snapshot
+SKILL.md                  Runtime LLM task routing and safety workflow
+README*.md                Human installation and maintainer guide on main
+CHANGELOG.md              Maintainer-visible repository changes on main
+NOTICE.md                 Runtime upstream source and licensing boundary
+docs/                     Main-only maintainer specifications
+references/               Runtime synchronized documentation snapshot
 references/INDEX.md       Generated document index
 references/SYNC_MANIFEST.json
                           Generated provenance metadata
-scripts/                  Maintenance, validation, install, and eval tools
+scripts/                  Main-only sync, validation, package, publish, eval tools
 tests/                    Deterministic tests without external network access
 evals/                    Prompt-to-document routing expectations
 .github/workflows/        CI and scheduled synchronization
@@ -86,8 +112,9 @@ explicit errors rather than silently swallowing failures.
 
 - Unit-test title extraction, deterministic index generation, and validation.
 - Integration-test exact mirror behavior with local fixture repositories.
-- Integration-test installer clone, update, and rejection paths with local Git
-  repositories only.
+- Contract-test the generated runtime package against an exact top-level
+  allowlist and reject Python, shell scripts, symbolic links, or maintainer
+  directories.
 - Validate all generated index links, metadata fields, file counts, Skill
   frontmatter, documentation claims, and required security instructions.
 - Run routing evaluations that map representative LINE questions to required
@@ -98,6 +125,7 @@ explicit errors rather than silently swallowing failures.
 
 - Always:
   - stage and validate a complete snapshot before replacing `references/`;
+  - publish the Skill with a runtime allowlist, never by copying the repository;
   - record upstream commit SHA, source URL, sync time, language, and document
     count;
   - pin GitHub Actions to immutable commit SHAs;
@@ -109,33 +137,41 @@ explicit errors rather than silently swallowing failures.
 - Never:
   - execute code copied from the upstream documentation repository;
   - commit secrets;
-  - overwrite a dirty or unrelated target Git checkout;
+  - install or execute `main` maintenance tools on an end user's computer;
+  - publish Python, shell scripts, workflows, tests, or maintainer docs to the
+    `skill` branch;
   - claim that installed copies update automatically when the host copied a
     snapshot without `.git`.
 
 ## Implementation Plan
 
-1. Add failing tests for stale-file removal, masked failures, installer behavior,
-   generated metadata, repository validation, and routing evaluation.
-2. Refactor synchronization and installation scripts until the tests pass.
-3. Add repository validation, provenance metadata, CI, and routing evaluations.
-4. Update Skill guidance, installation docs, scope, licensing, and changelog.
-5. Run syntax, unit, integration, validation, eval, and security checks.
-6. Commit focused changes and push `main`.
+1. Contract-test the runtime package before implementing its builder.
+2. Build the runtime package from an explicit allowlist.
+3. Publish the package to `skill` after validated `main` pushes and every
+   scheduled sync.
+4. Remove the local installer and all runtime references to maintainer code.
+5. Update Skill guidance, README files, architecture, and changelog.
+6. Run syntax, unit, integration, package, validation, and routing checks.
+7. Push `main`, then confirm the workflow published `skill`.
 
 ## Success Criteria
 
 - A removed upstream fixture file is removed from the synchronized destination.
 - Any failed sync step exits non-zero and cannot publish a partial snapshot.
-- A missing install target is cloned; a valid target is fast-forward updated;
-  dirty, divergent, or unrelated targets are rejected.
+- The generated runtime package has exactly five top-level entries:
+  `SKILL.md`, `agents`, `references`, `LICENSE`, and `NOTICE.md`.
+- The runtime package contains no Python, shell scripts, maintenance tooling, or
+  runtime dependency installation.
 - `references/INDEX.md` and `references/SYNC_MANIFEST.json` are deterministic
   except for the explicit synchronization timestamp.
 - CI validates generated artifacts and representative LLM routing behavior.
+- GitHub Actions publishes validated runtime content to `skill` on `main`
+  changes and after every scheduled synchronization.
 - `SKILL.md` includes discovery triggers, exclusions, minimal-context lookup,
   external-content safety, output requirements, and verifiable completion
   criteria.
-- README files accurately describe the current scope and document count.
+- README files direct users only to the `skill` branch and explicitly state
+  that Python is not required.
 - Licensing text identifies the LY Corporation terms governing synchronized
   documentation.
 - All checks pass and the resulting commits are pushed to `origin/main`.

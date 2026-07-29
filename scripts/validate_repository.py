@@ -161,6 +161,10 @@ def validate_repository(project_root: Path) -> list[str]:
                 errors.append(f"SKILL.md is missing section: {section}")
         if len(skill_text.splitlines()) > 500:
             errors.append("SKILL.md exceeds the 500-line context budget")
+        if "scripts/" in skill_text or ".py" in skill_text:
+            errors.append(
+                "SKILL.md must not direct installed Skills to maintenance code"
+            )
 
     manifest_path = project_root / "references" / "SYNC_MANIFEST.json"
     if manifest_path.is_file():
@@ -191,8 +195,20 @@ def validate_repository(project_root: Path) -> list[str]:
             errors.append(f"{readme_name} does not explain provenance metadata")
         if "NOTICE.md" not in readme:
             errors.append(f"{readme_name} does not link the licensing boundary")
+        if "--branch skill --single-branch" not in readme:
+            errors.append(
+                f"{readme_name} must install from the runtime skill branch"
+            )
+        if "install-skill.sh" in readme:
+            errors.append(
+                f"{readme_name} still references the obsolete installer"
+            )
 
-    for script_name in ("sync-docs.sh", "install-skill.sh"):
+    for script_name in (
+        "sync-docs.sh",
+        "build-skill-package.sh",
+        "publish-skill.sh",
+    ):
         script_path = project_root / "scripts" / script_name
         if not os.access(script_path, os.X_OK):
             errors.append(f"Maintenance script is not executable: {script_name}")
@@ -210,6 +226,15 @@ def validate_repository(project_root: Path) -> list[str]:
                 errors.append(f"{workflow_path.name} has no timeout")
             if "concurrency:" not in workflow:
                 errors.append(f"{workflow_path.name} has no concurrency policy")
+
+        for workflow_name in ("auto-sync.yml", "validate.yml"):
+            workflow_path = workflows_root / workflow_name
+            if workflow_path.is_file():
+                workflow = workflow_path.read_text(encoding="utf-8")
+                if "bash scripts/publish-skill.sh" not in workflow:
+                    errors.append(
+                        f"{workflow_name} does not publish the runtime branch"
+                    )
 
     return errors
 

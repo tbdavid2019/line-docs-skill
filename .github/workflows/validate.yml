@@ -1,4 +1,4 @@
-name: Validate Skill
+name: Validate and Publish Skill
 
 on:
   pull_request:
@@ -32,7 +32,10 @@ jobs:
 
       - name: Check script syntax
         run: |
-          bash -n scripts/sync-docs.sh scripts/install-skill.sh
+          bash -n \
+            scripts/build-skill-package.sh \
+            scripts/publish-skill.sh \
+            scripts/sync-docs.sh
           python3 -m py_compile \
             scripts/generate_index.py \
             scripts/run_skill_evals.py \
@@ -46,3 +49,23 @@ jobs:
         run: |
           python3 scripts/validate_repository.py
           python3 scripts/run_skill_evals.py
+
+  publish:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    concurrency:
+      group: publish-line-docs-runtime
+      cancel-in-progress: false
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout maintenance source
+        # actions/checkout v5
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          fetch-depth: 0
+
+      - name: Publish clean runtime Skill branch
+        run: bash scripts/publish-skill.sh

@@ -44,10 +44,29 @@ jobs:
         run: |
           if [[ -z "$(git status --porcelain -- references)" ]]; then
             echo "Documentation snapshot is already current."
-            exit 0
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add references
+            git commit -m "chore: sync LINE documentation snapshot"
+            git push origin HEAD:main
           fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add references
-          git commit -m "chore: sync LINE documentation snapshot"
-          git push origin HEAD:main
+
+  publish:
+    needs: sync
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    concurrency:
+      group: publish-line-docs-runtime
+      cancel-in-progress: false
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout validated maintenance source
+        # actions/checkout v5
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          fetch-depth: 0
+
+      - name: Publish clean runtime Skill branch
+        run: bash scripts/publish-skill.sh
