@@ -29,6 +29,9 @@ PINNED_COMMIT_PATTERN = re.compile(r"^[0-9a-f]{40}$")
 OFFICIAL_SOURCE_URL = (
     "https://github.com/line/line-developers-docs-source.git"
 )
+MANDATORY_UPDATE_COMMAND = (
+    "git -C <skill-directory> pull --ff-only origin skill"
+)
 
 
 def validate_references(references_root: Path) -> list[str]:
@@ -165,6 +168,12 @@ def validate_repository(project_root: Path) -> list[str]:
             errors.append(
                 "SKILL.md must not direct installed Skills to maintenance code"
             )
+        if "Before every LINE documentation task" not in skill_text:
+            errors.append("SKILL.md does not require refresh before every task")
+        if MANDATORY_UPDATE_COMMAND not in skill_text:
+            errors.append("SKILL.md does not contain the mandatory pull command")
+        if "If the pull fails" not in skill_text:
+            errors.append("SKILL.md does not define pull failure behavior")
 
     manifest_path = project_root / "references" / "SYNC_MANIFEST.json"
     if manifest_path.is_file():
@@ -203,6 +212,22 @@ def validate_repository(project_root: Path) -> list[str]:
             errors.append(
                 f"{readme_name} still references the obsolete installer"
             )
+        if "AI Agent Installation Contract" not in readme:
+            errors.append(
+                f"{readme_name} has no AI Agent Installation Contract"
+            )
+        if MANDATORY_UPDATE_COMMAND not in readme:
+            errors.append(
+                f"{readme_name} does not contain the mandatory pull command"
+            )
+        for runtime_file in (
+            "references/SYNC_MANIFEST.json",
+            "references/INDEX.md",
+        ):
+            if runtime_file not in readme:
+                errors.append(
+                    f"{readme_name} does not verify {runtime_file}"
+                )
 
     for script_name in (
         "sync-docs.sh",

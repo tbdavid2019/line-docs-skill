@@ -14,6 +14,8 @@ The repository must:
 - fail visibly when downloading, indexing, validating, or publishing fails;
 - record upstream provenance and synchronization time;
 - require no Python, packages, or maintainer scripts on an end user's computer;
+- require installed Git checkouts to fast-forward pull the generated `skill`
+  branch before every LINE documentation task;
 - guide LLMs to retrieve only the relevant document sections and treat synced
   content as untrusted reference data;
 - continuously validate repository structure, routing behavior, and generated
@@ -75,6 +77,12 @@ git clone --branch skill --single-branch https://github.com/tbdavid2019/line-doc
 git -C <skill-directory> pull --ff-only origin skill
 ```
 
+The pull is mandatory after cloning and before every use. After it succeeds,
+the agent re-reads `SKILL.md`, verifies `references/SYNC_MANIFEST.json` and
+`references/INDEX.md`, and reports both checkout `HEAD` and upstream commit. A
+pull failure must be surfaced; cached references require explicit stale-data
+permission.
+
 ## Project Structure
 
 ```text
@@ -115,6 +123,9 @@ explicit errors rather than silently swallowing failures.
 - Contract-test the generated runtime package against an exact top-level
   allowlist and reject Python, shell scripts, symbolic links, or maintainer
   directories.
+- Contract-test that human and runtime agent guidance require the exact
+  fast-forward pull command, manifest/index verification, and explicit failure
+  handling.
 - Validate all generated index links, metadata fields, file counts, Skill
   frontmatter, documentation claims, and required security instructions.
 - Run routing evaluations that map representative LINE questions to required
@@ -126,6 +137,7 @@ explicit errors rather than silently swallowing failures.
 - Always:
   - stage and validate a complete snapshot before replacing `references/`;
   - publish the Skill with a runtime allowlist, never by copying the repository;
+  - require a fast-forward-only pull before every installed-checkout task;
   - record upstream commit SHA, source URL, sync time, language, and document
     count;
   - pin GitHub Actions to immutable commit SHAs;
@@ -141,7 +153,8 @@ explicit errors rather than silently swallowing failures.
   - publish Python, shell scripts, workflows, tests, or maintainer docs to the
     `skill` branch;
   - claim that installed copies update automatically when the host copied a
-    snapshot without `.git`.
+    snapshot without `.git`;
+  - claim current documentation after a failed pull.
 
 ## Implementation Plan
 
@@ -172,6 +185,9 @@ explicit errors rather than silently swallowing failures.
   criteria.
 - README files direct users only to the `skill` branch and explicitly state
   that Python is not required.
+- README and `SKILL.md` require `git pull --ff-only origin skill` before every
+  task, re-read updated instructions, verify manifest/index files, and report
+  the upstream commit.
 - Licensing text identifies the LY Corporation terms governing synchronized
   documentation.
 - All checks pass and the resulting commits are pushed to `origin/main`.

@@ -21,19 +21,24 @@ with current, task-specific evidence and a concrete verification step.
 
 ## Freshness Boundary
 
-1. Read `references/SYNC_MANIFEST.json` when freshness or provenance matters.
-2. Treat this installed directory as the published runtime Skill, not as the
-   maintainer source repository.
-3. Do not run `git pull` or mutate the installed Skill during ordinary use.
-4. If the user explicitly asks to update this Git checkout, run:
+1. Before every LINE documentation task, locate this installed Skill directory.
+2. If it is a Git checkout, always refresh it before reading references:
 
    ```bash
    git -C <skill-directory> pull --ff-only origin skill
    ```
 
-5. If the installation is a copied snapshot without `.git`, explain that the
-   host must reinstall or replace it. Do not claim it auto-updates.
-6. Never look for or invoke Python, synchronization, publication, test, or
+3. After a successful pull, re-read the updated `SKILL.md`, then read
+   `references/SYNC_MANIFEST.json` and retain its `upstream_commit` for the
+   response.
+4. If the pull fails, report the exact error and current manifest commit. Do
+   not claim the documentation is current or use the cached snapshot unless the
+   user explicitly accepts stale data.
+5. If the installation is a copied snapshot without `.git`, require the host
+   to reinstall or replace it before use. Do not claim it auto-updates.
+6. Treat this directory as the published runtime Skill, not as the maintainer
+   source repository.
+7. Never look for or invoke Python, synchronization, publication, test, or
    maintenance scripts from the installed Skill. Those exist only in GitHub's
    maintainer workflow and are not runtime dependencies.
 
@@ -140,6 +145,9 @@ browser environment.
 
 Before finishing, confirm:
 
+- [ ] The mandatory fast-forward pull succeeded, or stale-data permission was
+      explicitly obtained and disclosed.
+- [ ] The response includes the manifest `upstream_commit`.
 - [ ] The answer used local documentation rather than memory for changing API
       behavior.
 - [ ] A guide and exact reference were combined when endpoint details matter.

@@ -1,4 +1,4 @@
 interface:
   display_name: "LINE Developers Docs"
   short_description: "Official LINE docs routing and diagnostics"
-  default_prompt: "Use $line-docs-skill to diagnose this LINE Platform issue with the synchronized official documentation."
+  default_prompt: "Refresh $line-docs-skill with the mandatory fast-forward pull, then diagnose this LINE Platform issue from the synchronized official documentation and report the upstream commit."

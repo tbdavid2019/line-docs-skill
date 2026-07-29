@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-import tempfile
 import subprocess
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -9,6 +9,9 @@ from scripts.validate_repository import validate_repository
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
+MANDATORY_UPDATE_COMMAND = (
+    "git -C <skill-directory> pull --ff-only origin skill"
+)
 
 
 class RepositoryContractTests(unittest.TestCase):
@@ -31,6 +34,26 @@ class RepositoryContractTests(unittest.TestCase):
         )
 
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    def test_ai_agent_contract_requires_refresh_before_use(self) -> None:
+        for readme_name in ("README.md", "README_TW.md"):
+            with self.subTest(readme=readme_name):
+                readme = (REPOSITORY_ROOT / readme_name).read_text(
+                    encoding="utf-8"
+                )
+                self.assertIn("AI Agent Installation Contract", readme)
+                self.assertIn(MANDATORY_UPDATE_COMMAND, readme)
+                self.assertIn("references/SYNC_MANIFEST.json", readme)
+                self.assertIn("references/INDEX.md", readme)
+
+        skill = (REPOSITORY_ROOT / "SKILL.md").read_text(encoding="utf-8")
+        self.assertIn("Before every LINE documentation task", skill)
+        self.assertIn(MANDATORY_UPDATE_COMMAND, skill)
+        self.assertIn("If the pull fails", skill)
+        self.assertNotIn(
+            "Do not run `git pull` or mutate the installed Skill",
+            skill,
+        )
 
     def test_invalid_manifest_is_reported_without_crashing(self) -> None:
         for invalid_manifest in ("not-json\n", "[]\n"):

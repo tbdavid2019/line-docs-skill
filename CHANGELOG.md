@@ -2,6 +2,30 @@
 
 All notable changes to this repository are documented in this file.
 
+## 2026-07-29 — Mandatory installed-checkout refresh
+
+### Changed
+
+- Added a named `AI Agent Installation Contract` to both READMEs with the exact
+  clone target, mandatory fast-forward pull, required runtime files, and
+  installation reporting contract.
+- Made `git -C <skill-directory> pull --ff-only origin skill` mandatory after
+  installation and before every LINE documentation task.
+- Changed `SKILL.md` to re-read itself after a successful update and report the
+  manifest `upstream_commit` in every response.
+- Defined fail-closed freshness behavior: a failed pull must be reported, the
+  agent must not claim the snapshot is current, and cached documents require
+  explicit user approval.
+- Updated `agents/openai.yaml` so the default prompt starts with the mandatory
+  refresh and provenance report.
+- Added a regression contract and repository validation rules preventing the
+  mandatory update guidance from being removed or weakened.
+
+### Verification
+
+- The suite now contains 12 deterministic tests, including the AI installation
+  and per-task refresh contract.
+
 ## 2026-07-29 — Runtime distribution correction
 
 This section supersedes the same-day installer model described below.
@@ -27,8 +51,8 @@ This section supersedes the same-day installer model described below.
 
 ### Verification
 
-- The current suite contains 11 deterministic tests after removing obsolete
-  local-installer tests and adding the runtime package contract.
+- At that release, the suite contained 11 deterministic tests after removing
+  obsolete local-installer tests and adding the runtime package contract.
 - The release is complete only after `main` CI succeeds and the generated
   `skill` branch is confirmed to contain the runtime allowlist.
 
