@@ -40,7 +40,7 @@ python3 scripts/run_skill_evals.py
 
 # Syntax checks
 bash -n scripts/sync-docs.sh scripts/install-skill.sh
-python3 -m py_compile scripts/generate_index.py scripts/validate_repository.py scripts/run_skill_evals.py
+python3 -m py_compile scripts/generate_index.py scripts/validate_repository.py scripts/run_skill_evals.py scripts/write_sync_manifest.py
 
 # Repository maintenance only
 bash scripts/sync-docs.sh

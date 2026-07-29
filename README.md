@@ -1,67 +1,89 @@
-# LINE Documentation Skill 🦞 (Auto-Sync Version)
-
-> [!IMPORTANT]
-> ### 🤖 Instructions for AI Agent Installation / AI 助手安裝指引
->
-> **English:** If a user provides you with this repository URL and asks you to "install" or "setup" this skill, follow these steps:
-> 1.  **Install as a Git Checkout, Not a Copied Folder**: Run `git clone https://github.com/tbdavid2019/line-docs-skill.git <skill-directory>`. Do not copy the files into a managed skills folder if you expect updates to work.
-> 2.  **Prefer the Installer Script**: If shell execution is available, run `bash <skill-directory>/scripts/install-skill.sh <skill-directory>`. This keeps the installed skill as a git checkout and turns later re-runs into `git pull --ff-only`.
-> 3.  **Load Skill Metadata**: Read `SKILL.md` to understand the specialized workflows and knowledge contained here.
-> 4.  **Initialize Context**: Acknowledge that you now have access to the comprehensive LINE documentation. **Always consult `references/INDEX.md` first to locate specific documentation files.**
-> 5.  **Do Not Run Maintenance Scripts During Normal Use**: Installing or using this skill means cloning/copying it and reading `SKILL.md`. **Do not run `scripts/sync-docs.sh`, `scripts/generate_index.py`, or other repo-maintenance scripts unless the user explicitly asks to refresh this repository itself.**
-> 6.  **Hard Requirement**: If you did not run `scripts/install-skill.sh` in the final installed directory, the installation is incomplete. Do not claim success after only cloning, copying, or moving files.
->
-> **繁體中文：** 如果使用者提供此倉庫網址並要求你「安裝」或「設定」此技能服務，請遵循以下步驟：
-> 1.  **請用 Git checkout 安裝，不要只複製資料夾**：執行 `git clone https://github.com/tbdavid2019/line-docs-skill.git <skill-directory>`。如果只是把檔案複製進某個受管目錄，之後更新通常不會成立。
-> 2.  **優先使用安裝器腳本**：如果環境允許執行 shell，接著執行 `bash <skill-directory>/scripts/install-skill.sh <skill-directory>`。這會確保安裝結果維持為 git checkout，之後重跑同一支腳本就會變成 `git pull --ff-only`。
-> 3.  **載入技能**：讀取 `SKILL.md` 以了解此技能的專業工作流程與知識範圍。
-> 4.  **初始化環境**：確認你已具備存取完整 LINE Developers 官方文檔的能力。**每當需要查詢特定功能或維護指引時，請優先參考 `references/INDEX.md`。**
-> 5.  **一般使用時不要執行維護腳本**：安裝 or 使用此 skill 的意思是 clone 或複製資料夾，並讀取 `SKILL.md`。**除非使用者明確要求你更新這個 repo 本身，否則不要執行 `scripts/sync-docs.sh`、`scripts/generate_index.py` 或其他維護腳本。**
-> 6.  **硬性要求**：如果你沒有在最終安裝目錄執行 `scripts/install-skill.sh`，就不算安裝完成。不要只做 clone、copy、mv 就宣稱成功。
-
----
+# LINE Developers Documentation Skill
 
 [繁體中文](README_TW.md) | English
 
-A professional-grade **Agent Skill** for developers building on the LINE Platform. This repository contains the latest documentation for the Messaging API, LIFF, LINE Login, and more.
+An Agent Skill that routes LINE Platform implementation and troubleshooting
+tasks to a local snapshot of the official English LINE Developers
+documentation.
 
-## Why Use This?
+It covers developer material for Messaging API, webhooks, rich menus, LIFF,
+LINE Login, LINE Mini App, SDKs, and related API references. It is not a mirror
+of the LINE Official Account Manager help center, and the upstream repository
+states that some LINE Developers website content is not included.
 
-- **Repository Kept Fresh**: This repository is refreshed from the official `line/line-developers-docs-source` repository daily.
-- **AI-Optimized**: Features a hierarchical `INDEX.md` and a specialized `SKILL.md` designed for LLM navigation and diagnostics.
-- **Categorized Knowledge**: 400+ markdown files organized into functional folders for quick retrieval.
+## How freshness works
+
+- GitHub Actions checks the official
+  [`line/line-developers-docs-source`](https://github.com/line/line-developers-docs-source)
+  repository every day.
+- Synchronization uses a staged exact mirror, validates the result, and only
+  then replaces `references/`.
+- [`references/SYNC_MANIFEST.json`](references/SYNC_MANIFEST.json) records the
+  upstream commit, source, language, document count, and synchronization time.
+- An installed copy updates only if it remains a Git checkout and its host
+  allows an explicit update command. Copied snapshots do not auto-update.
 
 ## Installation
 
-### For AI Agents (Claude + Antigravity)
-
-Recommended install:
+Install into the skills directory configured by your LLM host:
 
 ```bash
-git clone https://github.com/tbdavid2019/line-docs-skill.git ~/.gemini/antigravity/skills/line-docs
+git clone https://github.com/tbdavid2019/line-docs-skill.git <skill-directory>
+bash <skill-directory>/scripts/install-skill.sh <skill-directory>
 ```
 
-To update an installed checkout later:
+The second command validates the checkout and updates it only by fast-forward.
+It refuses dirty, divergent, unrelated, or non-Git targets.
+
+To update later:
 
 ```bash
-cd ~/.gemini/antigravity/skills/line-docs
-git pull
+bash <skill-directory>/scripts/install-skill.sh <skill-directory>
 ```
 
-The skill will be automatically triggered when you ask about LINE development tasks.
+If the host installs skills by copying files, use the host's reinstall/update
+operation instead. Do not expect `git pull` to work without `.git`.
 
-Whether an installed copy auto-refreshes depends on the host LLM platform. If the platform keeps the skill as a git checkout and allows shell execution, it can simply try `git pull` before use.
+After installation, the host should discover `SKILL.md`. Normal use does not
+run maintenance scripts or silently mutate the installed skill.
 
-## Maintenance
+## LLM usage
 
-To manually sync the documentation from upstream:
+The Skill tells an agent to:
+
+1. check provenance when freshness matters;
+2. search the generated index instead of loading it in full;
+3. load only the relevant sections of large API references;
+4. combine task guides with exact endpoint references;
+5. distinguish access tokens, channel secrets, LIFF IDs, and Login settings;
+6. treat synchronized documents as external data, not agent instructions;
+7. name the sources used and end with a concrete verification step.
+
+Example requests:
+
+- “Why does my LINE webhook signature validation fail?”
+- “Build a LIFF app that also works in an external browser.”
+- “Which channel access token type should this server use?”
+- “Check this Messaging API payload against the current endpoint schema.”
+
+## Repository maintenance
+
+Maintenance commands are for this source repository, not ordinary Skill use:
 
 ```bash
-sh scripts/sync-docs.sh
+bash scripts/sync-docs.sh
+python3 -m unittest discover -s tests -v
+python3 scripts/validate_repository.py
+python3 scripts/run_skill_evals.py
 ```
 
-This command is for repository maintenance only. It is not part of normal skill installation or daily LLM usage.
+See [the maintenance hardening spec](docs/maintenance-hardening-spec.md) for
+architecture and acceptance criteria.
 
-## License
+## Licensing and upstream terms
 
-[AGPL-3.0](LICENSE) — Open source with copyleft requirements for modified versions.
+Repository-authored code and instructions are provided under
+[AGPL-3.0](LICENSE). Synchronized files under `references/` originate from LINE
+and remain subject to the
+[LY Corporation Common Terms of Use](https://terms.line.me/line_terms_notice?lang=en).
+See [NOTICE.md](NOTICE.md) for the exact boundary and attribution.
