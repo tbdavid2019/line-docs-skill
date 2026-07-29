@@ -97,6 +97,35 @@ class SyncDocsTests(unittest.TestCase):
             self.assertNotEqual(result.returncode, 0)
             self.assertEqual(marker.read_text(encoding="utf-8"), "existing\n")
 
+    def test_same_upstream_commit_preserves_snapshot_timestamp(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            upstream, _ = self.create_upstream_repository(root)
+            destination = root / "references"
+            first_environment = self.sync_environment(upstream, destination)
+            run(
+                "bash",
+                str(SYNC_SCRIPT),
+                cwd=REPOSITORY_ROOT,
+                env=first_environment,
+            )
+
+            second_environment = self.sync_environment(upstream, destination)
+            second_environment["LINE_DOCS_SYNCED_AT"] = (
+                "2026-07-30T00:00:00Z"
+            )
+            run(
+                "bash",
+                str(SYNC_SCRIPT),
+                cwd=REPOSITORY_ROOT,
+                env=second_environment,
+            )
+
+            manifest = json.loads(
+                (destination / "SYNC_MANIFEST.json").read_text(encoding="utf-8")
+            )
+            self.assertEqual(manifest["synced_at"], "2026-07-29T00:00:00Z")
+
 
 if __name__ == "__main__":
     unittest.main()

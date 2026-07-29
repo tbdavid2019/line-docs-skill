@@ -1,67 +1,103 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -Eeuo pipefail
 
-# Configuration
-REPO_URL="https://github.com/line/line-developers-docs-source.git"
-SOURCE_SUBFOLDER="docs/en"
-DEST_FOLDER="references"
-TEMP_REPO=".tmp_repo"
+readonly PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+readonly REPO_URL="${LINE_DOCS_REPO_URL:-https://github.com/line/line-developers-docs-source.git}"
+readonly SOURCE_SUBFOLDER="${LINE_DOCS_SOURCE_SUBFOLDER:-docs/en}"
+readonly LANGUAGE="${LINE_DOCS_LANGUAGE:-${SOURCE_SUBFOLDER##*/}}"
+readonly SYNCED_AT="${LINE_DOCS_SYNCED_AT:-$(date -u '+%Y-%m-%dT%H:%M:%SZ')}"
 
-echo "🦞 LINE Documentation Sync Engine"
-echo "────────────────────────────────"
+if [[ "${LINE_DOCS_DEST_DIR:-}" == /* ]]; then
+    readonly DEST_DIR="$LINE_DOCS_DEST_DIR"
+else
+    readonly DEST_DIR="$PROJECT_DIR/${LINE_DOCS_DEST_DIR:-references}"
+fi
 
-# Ensure we are in the project root
-cd "$(dirname "$0")/.."
+case "$SOURCE_SUBFOLDER" in
+    ""|/*|*".."*)
+        echo "Invalid source subfolder: $SOURCE_SUBFOLDER" >&2
+        exit 2
+        ;;
+esac
 
-# Function to clean up temp repo
+if [[ -z "$DEST_DIR" || "$DEST_DIR" == "/" ]]; then
+    echo "Refusing unsafe destination: $DEST_DIR" >&2
+    exit 2
+fi
+
+readonly DEST_PARENT="$(dirname "$DEST_DIR")"
+mkdir -p "$DEST_PARENT"
+readonly TEMP_DIR="$(mktemp -d "$DEST_PARENT/.line-docs-sync.XXXXXX")"
+readonly UPSTREAM_DIR="$TEMP_DIR/upstream"
+readonly STAGED_REFERENCES="$TEMP_DIR/references"
+readonly PREVIOUS_REFERENCES="$TEMP_DIR/previous-references"
+
 cleanup() {
-    if [ -d "$TEMP_REPO" ]; then
-        echo "🧹 Cleaning up temporary repository..."
-        rm -rf "$TEMP_REPO"
+    local exit_status=$?
+    set +e
+    if [[ -e "$PREVIOUS_REFERENCES" && ! -e "$DEST_DIR" ]]; then
+        echo "Restoring previous snapshot after interrupted installation" >&2
+        mv "$PREVIOUS_REFERENCES" "$DEST_DIR"
     fi
+    if [[ -d "$TEMP_DIR" ]]; then
+        rm -rf "$TEMP_DIR"
+    fi
+    return "$exit_status"
 }
-
-# Trap exit to cleanup
 trap cleanup EXIT
 
-# Clear destination folder first (optional, but ensures clean state)
-# mkdir -p "$DEST_FOLDER"
-# rm -rf "$DEST_FOLDER"/*
+echo "LINE documentation sync"
+echo "Source: $REPO_URL ($SOURCE_SUBFOLDER)"
+echo "Destination: $DEST_DIR"
 
-echo "📡 Cloning upstream repository (sparse-checkout)..."
-mkdir -p "$TEMP_REPO"
-cd "$TEMP_REPO"
+git clone --depth 1 --filter=blob:none --sparse "$REPO_URL" "$UPSTREAM_DIR"
+git -C "$UPSTREAM_DIR" sparse-checkout set "$SOURCE_SUBFOLDER"
 
-git init
-git remote add origin "$REPO_URL"
-git config core.sparseCheckout true
-
-# Specify the subfolder to pull
-echo "$SOURCE_SUBFOLDER/*" >> .git/info/sparse-checkout
-
-# Pull the documentation
-git pull --depth 1 origin main
-
-# Check if the folder exists
-if [ ! -d "$SOURCE_SUBFOLDER" ]; then
-    echo "❌ Error: Could not find $SOURCE_SUBFOLDER in the upstream repository."
+readonly SOURCE_DIR="$UPSTREAM_DIR/$SOURCE_SUBFOLDER"
+if [[ ! -d "$SOURCE_DIR" ]]; then
+    echo "Upstream subfolder not found: $SOURCE_SUBFOLDER" >&2
     exit 1
 fi
 
-echo "📂 Syncing files to $DEST_FOLDER..."
-# Move back to project root
-cd ..
+mkdir -p "$STAGED_REFERENCES"
+cp -R "$SOURCE_DIR/." "$STAGED_REFERENCES/"
 
-# Copy files from temp repo to references
-# We flatten the docs/en structure into the references folder
-mkdir -p "$DEST_FOLDER"
-cp -R "$TEMP_REPO/$SOURCE_SUBFOLDER/"* "$DEST_FOLDER/"
+readonly UPSTREAM_COMMIT="$(git -C "$UPSTREAM_DIR" rev-parse HEAD)"
+python3 "$PROJECT_DIR/scripts/generate_index.py" \
+    --root "$STAGED_REFERENCES" \
+    --output "$STAGED_REFERENCES/INDEX.md"
 
-# Summary
-FILE_COUNT=$(find "$DEST_FOLDER" -name "*.md" | wc -l)
-echo "✅ Sync complete! $FILE_COUNT markdown files synced."
+manifest_arguments=(
+    --root "$STAGED_REFERENCES"
+    --output "$STAGED_REFERENCES/SYNC_MANIFEST.json"
+    --source-url "$REPO_URL"
+    --source-subfolder "$SOURCE_SUBFOLDER"
+    --upstream-commit "$UPSTREAM_COMMIT"
+    --synced-at "$SYNCED_AT"
+    --language "$LANGUAGE"
+)
+if [[ -f "$DEST_DIR/SYNC_MANIFEST.json" ]]; then
+    manifest_arguments+=(
+        --previous-manifest "$DEST_DIR/SYNC_MANIFEST.json"
+    )
+fi
+python3 "$PROJECT_DIR/scripts/write_sync_manifest.py" \
+    "${manifest_arguments[@]}"
+python3 "$PROJECT_DIR/scripts/validate_repository.py" \
+    --references-only "$STAGED_REFERENCES"
 
-# Generate index
-echo "🗂️ Generating documentation index..."
-python3 scripts/generate_index.py
+if [[ -e "$DEST_DIR" ]]; then
+    mv "$DEST_DIR" "$PREVIOUS_REFERENCES"
+fi
+if ! mv "$STAGED_REFERENCES" "$DEST_DIR"; then
+    if [[ -e "$PREVIOUS_REFERENCES" && ! -e "$DEST_DIR" ]]; then
+        mv "$PREVIOUS_REFERENCES" "$DEST_DIR"
+    fi
+    echo "Failed to install synchronized snapshot" >&2
+    exit 1
+fi
 
-echo "💡 Tip: Run this script whenever you want to update the documentation."
+readonly DOCUMENT_COUNT="$(
+    find "$DEST_DIR" -type f -name '*.md' ! -name 'INDEX.md' | wc -l | tr -d ' '
+)"
+echo "Sync complete: $DOCUMENT_COUNT source documents at $UPSTREAM_COMMIT"

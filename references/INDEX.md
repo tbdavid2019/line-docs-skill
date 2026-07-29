@@ -1,6 +1,6 @@
 # LINE Developers Documentation Index
 
-This is a comprehensive index of all available LINE Developers documentation, organized by category.
+This is a comprehensive index of the synchronized LINE Developers documentation, organized by category.
 
 ## Docs > Basics > Channel Access Token
 - [Channel access token](docs/basics/channel-access-token/index.html.md)

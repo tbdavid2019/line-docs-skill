@@ -1,102 +1,129 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
+import argparse
 import os
 import re
+from pathlib import Path
 
-def extract_title(file_path):
-    """
-    Extracts the title from a markdown file.
-    Priority:
-    1. yaml frontmatter 'title:'
-    2. first H1 header '# Title'
-    3. filename (capitalized)
-    """
-    try:
-        with open(file_path, 'r', encoding='utf-8') as f:
-            content = f.read()
-            
-            # 1. Try YAML frontmatter
-            frontmatter_match = re.search(r'^---\s*\n(.*?)\n---\s*\n', content, re.DOTALL)
-            if frontmatter_match:
-                lines = frontmatter_match.group(1).split('\n')
-                for line in lines:
-                    if line.strip().startswith('title:'):
-                        title = line.replace('title:', '').strip().strip('"').strip("'")
-                        if title:
-                            return title
-            
-            # 2. Try first H1
-            h1_match = re.search(r'^#\s+(.+)$', content, re.MULTILINE)
-            if h1_match:
-                return h1_match.group(1).strip()
-    except Exception:
-        pass
-    
-    # 3. Fallback to filename
-    basename = os.path.basename(file_path)
-    if basename == 'index.md' or basename == 'INDEX.md':
-        parent_dir = os.path.basename(os.path.dirname(file_path))
-        if parent_dir and parent_dir != 'references':
-            return parent_dir.replace('-', ' ').replace('_', ' ').capitalize()
+
+GENERATED_FILENAMES = {"INDEX.md"}
+SKIPPED_DIRECTORIES = {"assets", "images", "img", "static"}
+
+
+def extract_title(file_path: str | Path) -> str:
+    """Extract a useful title from frontmatter, the first H1, or the filename."""
+    path = Path(file_path)
+    content = path.read_text(encoding="utf-8")
+
+    frontmatter_match = re.search(
+        r"^---\s*\n(.*?)\n---\s*\n",
+        content,
+        re.DOTALL,
+    )
+    if frontmatter_match:
+        for line in frontmatter_match.group(1).splitlines():
+            key, separator, value = line.partition(":")
+            if separator and key.strip() == "title":
+                title = value.strip().strip("\"'")
+                if title:
+                    return title
+
+    h1_match = re.search(r"^#\s+(.+)$", content, re.MULTILINE)
+    if h1_match:
+        return h1_match.group(1).strip()
+
+    if path.name.lower() == "index.md":
+        parent_name = path.parent.name
+        if parent_name and parent_name != "references":
+            return _humanize(parent_name)
         return "Overview"
-    
-    return os.path.splitext(basename)[0].replace('-', ' ').replace('_', ' ').capitalize()
 
-def generate_index(root_dir):
-    docs = {}
-    
-    for root, dirs, files in os.walk(root_dir):
-        # Skip hidden directories and assets/images
-        dirs[:] = [d for d in dirs if not d.startswith('.') and d not in ['assets', 'images', 'img', 'static']]
-        
-        md_files = [f for f in files if f.endswith('.md') and f.upper() != 'INDEX.MD']
-        if not md_files:
+    return _humanize(path.stem)
+
+
+def _humanize(value: str) -> str:
+    return value.replace("-", " ").replace("_", " ").capitalize()
+
+
+def _category_name(relative_directory: Path) -> str:
+    if relative_directory == Path("."):
+        return "General"
+    return " > ".join(_humanize(part).title() for part in relative_directory.parts)
+
+
+def generate_index(root_dir: str | Path) -> str:
+    """Return a deterministic Markdown index for all source documents."""
+    root_path = Path(root_dir).resolve()
+    categories: dict[str, list[str]] = {}
+
+    for current_root, directories, filenames in os.walk(root_path):
+        directories[:] = sorted(
+            directory
+            for directory in directories
+            if not directory.startswith(".")
+            and directory not in SKIPPED_DIRECTORIES
+        )
+        markdown_files = sorted(
+            filename
+            for filename in filenames
+            if filename.endswith(".md")
+            and filename not in GENERATED_FILENAMES
+        )
+        if not markdown_files:
             continue
-            
-        rel_path = os.path.relpath(root, root_dir)
-        if rel_path == '.':
-            category = 'General'
-        else:
-            # Create a nice category name from the folder path
-            category = rel_path.replace('/', ' > ').replace('-', ' ').replace('_', ' ').title()
-            
-        docs[category] = []
-        for f in sorted(md_files):
-            full_path = os.path.join(root, f)
-            title = extract_title(full_path)
-            # Create a path relative to the references directory for the link
-            link_path = os.path.relpath(full_path, root_dir)
-            docs[category].append(f"- [{title}]({link_path})")
 
-    # Build the Markdown content
+        current_path = Path(current_root)
+        category = _category_name(current_path.relative_to(root_path))
+        entries: list[str] = []
+        for filename in markdown_files:
+            full_path = current_path / filename
+            title = extract_title(full_path)
+            link_path = full_path.relative_to(root_path).as_posix()
+            entries.append(f"- [{title}]({link_path})")
+        categories.setdefault(category, []).extend(entries)
+
     lines = [
         "# LINE Developers Documentation Index",
         "",
-        "This is a comprehensive index of all available LINE Developers documentation, organized by category.",
-        ""
+        (
+            "This is a comprehensive index of the synchronized LINE Developers "
+            "documentation, organized by category."
+        ),
+        "",
     ]
-    
-    # Sort categories: General first, then alphabetical
-    categories = sorted(docs.keys(), key=lambda x: (x != 'General', x.lower()))
-    
-    for category in categories:
+
+    for category in sorted(
+        categories,
+        key=lambda value: (value != "General", value.lower()),
+    ):
         lines.append(f"## {category}")
-        lines.extend(docs[category])
+        lines.extend(categories[category])
         lines.append("")
 
     return "\n".join(lines)
 
+
+def parse_args() -> argparse.Namespace:
+    project_root = Path(__file__).resolve().parents[1]
+    default_root = project_root / "references"
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--root", type=Path, default=default_root)
+    parser.add_argument("--output", type=Path)
+    return parser.parse_args()
+
+
+def main() -> int:
+    args = parse_args()
+    root = args.root.resolve()
+    output = (args.output or root / "INDEX.md").resolve()
+    if not root.is_dir():
+        raise SystemExit(f"Reference directory does not exist: {root}")
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(generate_index(root), encoding="utf-8")
+    print(f"Generated {output}")
+    return 0
+
+
 if __name__ == "__main__":
-    base_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'references')
-    output_file = os.path.join(base_dir, 'INDEX.md')
-    
-    if not os.path.exists(base_dir):
-        print(f"⚠️ Error: Reference directory {base_dir} does not exist. Run sync-docs.sh first.")
-        os.makedirs(base_dir, exist_ok=True)
-    
-    print(f"🔍 Scanning {base_dir}...")
-    index_content = generate_index(base_dir)
-    
-    with open(output_file, 'w', encoding='utf-8') as f:
-        f.write(index_content)
-        
-    print(f"✅ Generated {output_file}")
+    raise SystemExit(main())
