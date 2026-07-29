@@ -1,0 +1,97 @@
+[
+  {
+    "id": "webhook-signature",
+    "prompt": "Webhook signature validation keeps failing even though the access token is valid.",
+    "required_docs": [
+      "references/docs/messaging-api/receiving-messages/index.html.md",
+      "references/docs/messaging-api/verify-webhook-signature/index.html.md",
+      "references/reference/messaging-api/index.html.md"
+    ],
+    "required_skill_phrases": [
+      "raw request body",
+      "channel secret",
+      "not an access token"
+    ]
+  },
+  {
+    "id": "liff-browser-context",
+    "prompt": "liff.init works in LINE but fails when I open the URL in Chrome.",
+    "required_docs": [
+      "references/docs/liff/overview/index.html.md",
+      "references/docs/liff/differences-between-liff-browser-and-external-browser/index.html.md"
+    ],
+    "required_skill_phrases": [
+      "LIFF browser",
+      "external browser"
+    ]
+  },
+  {
+    "id": "line-login-pkce",
+    "prompt": "How should I secure a LINE Login callback with PKCE?",
+    "required_docs": [
+      "references/docs/line-login/integrate-line-login/index.html.md",
+      "references/docs/line-login/security-checklist/index.html.md",
+      "references/docs/line-login/integrate-pkce/index.html.md"
+    ],
+    "required_skill_phrases": [
+      "callback URL",
+      "PKCE"
+    ]
+  },
+  {
+    "id": "rich-menu",
+    "prompt": "Create and assign a rich menu for a Messaging API bot.",
+    "required_docs": [
+      "references/docs/messaging-api/rich-menus-overview/index.html.md",
+      "references/docs/messaging-api/using-rich-menus/index.html.md"
+    ],
+    "required_skill_phrases": [
+      "channel access token",
+      "Rich menus"
+    ]
+  },
+  {
+    "id": "channel-access-token",
+    "prompt": "Which LINE token should my server use to call the Messaging API?",
+    "required_docs": [
+      "references/docs/basics/channel-access-token/index.html.md"
+    ],
+    "required_skill_phrases": [
+      "channel access token for Messaging API calls",
+      "channel secret for webhook signature validation"
+    ]
+  },
+  {
+    "id": "messaging-api-rate-limit",
+    "prompt": "The push endpoint returns HTTP 429. What limit applies?",
+    "required_docs": [
+      "references/reference/messaging-api/index.html.md"
+    ],
+    "required_skill_phrases": [
+      "locate headings first",
+      "endpoint-specific rate limit"
+    ]
+  },
+  {
+    "id": "mini-app-console",
+    "prompt": "Set up a new LINE Mini App channel and console configuration.",
+    "required_docs": [
+      "references/docs/line-mini-app/discover/introduction/index.html.md",
+      "references/docs/line-mini-app/develop/develop-overview/index.html.md",
+      "references/docs/line-mini-app/develop/configure-console/index.html.md"
+    ],
+    "required_skill_phrases": [
+      "region",
+      "verification-status"
+    ]
+  },
+  {
+    "id": "oa-manager-scope",
+    "prompt": "How do I configure coupons in LINE Official Account Manager?",
+    "required_docs": [],
+    "required_skill_phrases": [
+      "LINE Official Account Manager",
+      "current official help center"
+    ]
+  }
+]
