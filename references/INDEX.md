@@ -344,6 +344,9 @@ This is a comprehensive index of the synchronized LINE Developers documentation,
 ## Docs > Line Mini App > Quickstart
 - [Get started with LINE MINI App](docs/line-mini-app/quickstart/index.html.md)
 
+## Docs > Line Mini App > Service > Add Friend Option
+- [Add a LINE Official Account as a friend in a LINE MINI App (add friend option)](docs/line-mini-app/service/add-friend-option/index.html.md)
+
 ## Docs > Line Mini App > Service > Business Manager Link
 - [Link a LINE MINI App channel to a Business Manager organization](docs/line-mini-app/service/business-manager-link/index.html.md)
 
