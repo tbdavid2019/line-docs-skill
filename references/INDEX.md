@@ -575,6 +575,9 @@ This is a comprehensive index of the synchronized LINE Developers documentation,
 ## Docs > Partner Docs > Line Notification Messages > Overview
 - [LINE notification messages overview](docs/partner-docs/line-notification-messages/overview/index.html.md)
 
+## Docs > Partner Docs > Line Notification Messages > Statistics
+- [Get statistics of LINE notification messages](docs/partner-docs/line-notification-messages/statistics/index.html.md)
+
 ## Docs > Partner Docs > Line Notification Messages > Technical Specs
 - [Technical specifications of the LINE notification messages API](docs/partner-docs/line-notification-messages/technical-specs/index.html.md)
 
