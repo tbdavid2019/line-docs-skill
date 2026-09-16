@@ -6,7 +6,7 @@ With the add friend option, you can encourage users to add your LINE Official Ac
 
 You can display an option to add your LINE Official Account as a friend on the [verification screen](https://developers.line.biz/en/docs/line-mini-app/develop/configure-console/#verification-screen) or the [channel consent screen](https://developers.line.biz/en/docs/line-mini-app/develop/configure-console/#consent-screen-settings) of your LINE MINI App. This is called the add friend option.
 
-![](https://developers.line.biz/media/line-mini-app/channel-consent-simplification/add-friend-option-verification-screen-en.png) ![](https://developers.line.biz/media/line-mini-app/channel-consent-simplification/add-friend-option-channel-consent-screen-en.png)
+![](https://developers.line.biz/media/line-mini-app/channel-consent-simplification/add-friend-option-verification-screen-en.webp) ![](https://developers.line.biz/media/line-mini-app/channel-consent-simplification/add-friend-option-channel-consent-screen-en.webp)
 
 <!-- tip start -->
 
@@ -143,6 +143,14 @@ For more information, see [`liff.permission.requestAll()`](https://developers.li
 The verification screen may also be displayed when you execute a [method that requires permissions other than the `openid` scope](https://developers.line.biz/en/docs/line-mini-app/develop/channel-consent-simplification/#request-permissions-other-than-openid). In this case, the LINE Official Account configured as the **Default LINE Official Account** is displayed. You can’t switch to another LINE Official Account.
 
 ##### Switch the LINE Official Account displayed on the channel consent screen 
+
+<!-- note start -->
+
+**The feature to switch the LINE Official Account displayed on the channel consent screen is temporarily suspended**
+
+Due to a technical issue, the feature to switch the LINE Official Account displayed on the channel consent screen is temporarily suspended. For more information, see the news from [September 15, 2026](https://developers.line.biz/en/news/2026/09/15/use-multiple-accounts/).
+
+<!-- note end -->
 
 To switch the LINE Official Account displayed on the channel consent screen, add the `prompt_bot_id` query parameter to the [LIFF URL](https://developers.line.biz/en/glossary/#liff-url) or [permanent link](https://developers.line.biz/en/glossary/#permanent-link-liff). For the `prompt_bot_id` query parameter, specify the ID of the LINE Official Account that users are prompted to add as a friend, using its basic ID or [premium ID](https://developers.line.biz/en/glossary/#premium-id).
 
