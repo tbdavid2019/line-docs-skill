@@ -224,27 +224,6 @@ This is a comprehensive index of the synchronized LINE Developers documentation,
 ## Docs > Line Login Sdks > Unity Sdk > Using Sdk
 - [Using LINE SDK for other APIs and result handling](docs/line-login-sdks/unity-sdk/using-sdk/index.html.md)
 
-## Docs > Line Mini App > Demo > Maas Demo
-- [Travel experience demo](docs/line-mini-app/demo/maas-demo/index.html.md)
-
-## Docs > Line Mini App > Demo > Membership Demo
-- [Membership card demo](docs/line-mini-app/demo/membership-demo/index.html.md)
-
-## Docs > Line Mini App > Demo > Mixwayapi Demo
-- [Event experience demo](docs/line-mini-app/demo/mixwayapi-demo/index.html.md)
-
-## Docs > Line Mini App > Demo > Reservation Demo
-- [Store reservation demo](docs/line-mini-app/demo/reservation-demo/index.html.md)
-
-## Docs > Line Mini App > Demo > Smartretail Demo
-- [Purchase experience demo](docs/line-mini-app/demo/smartretail-demo/index.html.md)
-
-## Docs > Line Mini App > Demo > Tableorder Demo
-- [Table order demo](docs/line-mini-app/demo/tableorder-demo/index.html.md)
-
-## Docs > Line Mini App > Demo > Traisare Demo
-- [Mobile experience demo](docs/line-mini-app/demo/traisare-demo/index.html.md)
-
 ## Docs > Line Mini App > Design > Landscape
 - [Safe area of LINE MINI App](docs/line-mini-app/design/landscape/index.html.md)
 
