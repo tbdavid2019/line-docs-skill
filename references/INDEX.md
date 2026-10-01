@@ -296,6 +296,9 @@ This is a comprehensive index of the synchronized LINE Developers documentation,
 ## Docs > Line Mini App > Discover > Ui Components
 - [LINE MINI App UI components](docs/line-mini-app/discover/ui-components/index.html.md)
 
+## Docs > Line Mini App > In App Purchase > Apple Mini Apps Partner Program
+- [Reduced App Store fees through the Mini Apps Partner Program](docs/line-mini-app/in-app-purchase/apple-mini-apps-partner-program/index.html.md)
+
 ## Docs > Line Mini App > In App Purchase > Iap Guidelines
 - [In-app purchase development guidelines](docs/line-mini-app/in-app-purchase/iap-guidelines/index.html.md)
 
