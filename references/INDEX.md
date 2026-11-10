@@ -455,6 +455,9 @@ This is a comprehensive index of the synchronized LINE Developers documentation,
 ## Docs > Messaging Api > Ssl Tls Spec Of The Webhook Source
 - [SSL/TLS specification of the webhook source](docs/messaging-api/ssl-tls-spec-of-the-webhook-source/index.html.md)
 
+## Docs > Messaging Api > Stop Displaying Rich Menu
+- [Stop displaying rich menus](docs/messaging-api/stop-displaying-rich-menu/index.html.md)
+
 ## Docs > Messaging Api > Stop Using Line Official Account
 - [Stop using your LINE Official Account](docs/messaging-api/stop-using-line-official-account/index.html.md)
 
