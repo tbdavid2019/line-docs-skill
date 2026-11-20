@@ -144,6 +144,20 @@ class SkillPackageTests(unittest.TestCase):
                 second_publish.stdout,
             )
 
+            first_source = run("git", "rev-parse", "HEAD", cwd=repository).stdout.strip()
+            (repository / "references" / "new.md").write_text("New snapshot\n")
+            commit_all(repository, "update maintenance source")
+            run("git", "push", "origin", "main", cwd=repository)
+            run("bash", "scripts/publish-skill.sh", cwd=repository)
+
+            older_checkout = root / "older-maintenance"
+            run("git", "worktree", "add", "--detach", str(older_checkout), first_source, cwd=repository)
+            run("bash", "scripts/publish-skill.sh", cwd=older_checkout)
+            contents = run(
+                "git", "--git-dir", str(remote), "show", "skill:references/new.md", cwd=root,
+            ).stdout
+            self.assertEqual(contents, "New snapshot\n")
+
 
 if __name__ == "__main__":
     unittest.main()

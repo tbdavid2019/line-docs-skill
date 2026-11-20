@@ -11,6 +11,19 @@ LINE Login, LINE Mini App, SDKs, and related API references. It is not a mirror
 of the LINE Official Account Manager help center, and the upstream repository
 states that some LINE Developers website content is not included.
 
+## Install or update with npm
+
+With Node.js 22.20 or later and Git, run this from your project:
+
+```bash
+npx -y line-docs-skill@latest
+```
+
+The default target is Codex at `.agents/skills/line-docs-skill`. Use `--global`
+for a user installation or `--agent openclaw` to select OpenClaw. Re-run the
+same command and options to update. The installer fetches the validated GitHub
+`skill` branch and reports the installation path, runtime commit, and upstream commit.
+
 ## How freshness works
 
 - GitHub Actions checks the official
@@ -31,43 +44,31 @@ Official LINE docs → GitHub Actions on main → validation → skill branch
 
 ## AI Agent Installation Contract
 
-An AI agent installing or using this Skill must follow this contract:
-
-1. Use the host's configured skills directory. Name the final directory
-   `line-docs-skill`.
-2. If it is not installed, clone only the runtime branch:
+1. Identify the host and installation scope. For a new npm install, run
+   `npx -y line-docs-skill@latest` with the matching options.
+2. For a Git installation, clone the runtime branch into a directory named
+   `line-docs-skill`:
 
    ```bash
    git clone --branch skill --single-branch https://github.com/tbdavid2019/line-docs-skill.git <skill-directory>
    ```
 
-3. Whether the checkout is new or already exists, **always refresh it before
-   use**:
+3. Update an existing installation with its original method. For a Git checkout, run:
 
    ```bash
    git -C <skill-directory> pull --ff-only origin skill
    ```
 
-4. Read the updated `SKILL.md`.
-5. Confirm that `references/SYNC_MANIFEST.json` and `references/INDEX.md`
-   exist.
-6. Report the installation directory, the checkout's `HEAD` commit, and the
-   `upstream_commit` from `references/SYNC_MANIFEST.json`.
+4. Read the installed `SKILL.md` and verify `references/SYNC_MANIFEST.json` and
+   `references/INDEX.md`. Report the installed path, runtime commit, and `upstream_commit`.
 
-The pull is mandatory before every LINE documentation task because GitHub
-updates the repository daily but an installed checkout does not update itself.
-If the pull fails, report the exact failure and current manifest commit. Do not
-claim the documentation is current or continue with the cached snapshot unless
-the user explicitly accepts stale data.
-
-If the host installs skills by copying files, use the host's reinstall/update
-operation before use. A copied directory without `.git` cannot satisfy the
-mandatory pull contract.
+Use the local snapshot for ordinary documentation tasks. Refresh only when the
+user asks. A host-managed copy uses that host's update mechanism. If an update
+fails, report the error and the available local snapshot commit.
 
 The runtime branch contains only `SKILL.md`, `agents/`, `references/`,
-`LICENSE`, and `NOTICE.md`. No Python runtime, package installation, or
-maintenance script is required on the user's computer. Never install `main` as
-an LLM Skill.
+`LICENSE`, and `NOTICE.md`. The npm CLI uses this runtime branch. Installing
+with Git requires just Git. Both methods leave Python and maintenance scripts on `main`.
 
 ### Prompt for an AI agent
 
@@ -78,26 +79,18 @@ Install the following repository as a LINE Developers Skill:
 
 https://github.com/tbdavid2019/line-docs-skill
 
-Follow README.md's "AI Agent Installation Contract":
-1. Install it in your configured skills directory as line-docs-skill.
-2. Clone only the skill branch with --single-branch.
-3. Run `git -C <skill-directory> pull --ff-only origin skill` after cloning
-   and before every use. Do not run Python or maintainer scripts.
-4. Read the updated SKILL.md.
-5. Confirm references/SYNC_MANIFEST.json and references/INDEX.md exist.
-6. Report the installation directory, checkout HEAD, and upstream_commit.
-
-If git pull fails, do not claim the documentation is current. Report the
-failure and wait for permission before using the cached snapshot.
+Follow the AI Agent Installation Contract. Prefer npm for a new installation,
+keep the original update method for an existing installation, and report the
+installation path, runtime commit, and upstream commit.
 ```
 
 ## LLM usage
 
 The Skill tells an agent to:
 
-1. run the mandatory fast-forward pull before every task;
+1. use the installed snapshot during ordinary tasks;
 2. check and report provenance;
-3. search the generated index instead of loading it in full;
+3. follow the core task map or search the generated index as needed;
 4. load only the relevant sections of large API references;
 5. combine task guides with exact endpoint references;
 6. distinguish access tokens, channel secrets, LIFF IDs, and Login settings;
@@ -126,6 +119,14 @@ bash scripts/build-skill-package.sh <new-output-directory>
 
 See [the maintenance hardening spec](docs/maintenance-hardening-spec.md) for
 architecture and acceptance criteria.
+
+### Release the npm installer
+
+Daily syncs publish the validated `skill` branch. For installer changes, bump
+the npm version and lockfile. Test the first tarball with `npm pack`, then run
+`npm publish <tarball> --access public`. For later releases, configure Trusted
+Publishing for `publish-npm.yml` when ready to release, then push `v<version>`.
+The first OIDC publish must succeed within two days of configuring trust.
 
 ## Licensing and upstream terms
 

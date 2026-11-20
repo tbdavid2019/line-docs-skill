@@ -20,8 +20,18 @@ trap cleanup EXIT
 if git -C "$PROJECT_DIR" ls-remote --exit-code --heads origin skill \
     >/dev/null 2>&1; then
     git -C "$PROJECT_DIR" fetch origin skill
+    published_subject=$(git -C "$PROJECT_DIR" log -1 --format=%s FETCH_HEAD)
+    if [[ "$published_subject" =~ ^chore:\ publish\ runtime\ skill\ from\ ([0-9a-f]{40})$ ]]; then
+        published_source="${BASH_REMATCH[1]}"
+        if [[ "$published_source" != "$SOURCE_SHA" ]] &&
+            git -C "$PROJECT_DIR" cat-file -e "${published_source}^{commit}" 2>/dev/null &&
+            git -C "$PROJECT_DIR" merge-base --is-ancestor "$SOURCE_SHA" "$published_source"; then
+            echo "Runtime Skill branch already contains a newer maintenance snapshot."
+            exit 0
+        fi
+    fi
     git -C "$PROJECT_DIR" worktree add \
-        --detach "$WORKTREE_DIR" refs/remotes/origin/skill
+        --detach "$WORKTREE_DIR" FETCH_HEAD
 else
     git -C "$PROJECT_DIR" worktree add --detach "$WORKTREE_DIR" "$SOURCE_SHA"
     git -C "$WORKTREE_DIR" switch --orphan skill

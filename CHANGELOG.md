@@ -2,6 +2,12 @@
 
 All notable changes to this repository are documented in this file.
 
+## 1.0.0
+
+- Added `npx -y line-docs-skill@latest` to install or explicitly refresh the validated `skill` branch.
+- Published the exact commit from the daily sync job and protected the runtime branch against stale publication.
+- Switched ordinary lookups to the installed snapshot and routed common tasks directly to relevant sections.
+
 ## 2026-07-29 — Mandatory installed-checkout refresh
 
 ### Changed

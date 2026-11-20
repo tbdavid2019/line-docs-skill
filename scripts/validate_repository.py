@@ -29,9 +29,10 @@ PINNED_COMMIT_PATTERN = re.compile(r"^[0-9a-f]{40}$")
 OFFICIAL_SOURCE_URL = (
     "https://github.com/line/line-developers-docs-source.git"
 )
-MANDATORY_UPDATE_COMMAND = (
+GIT_UPDATE_COMMAND = (
     "git -C <skill-directory> pull --ff-only origin skill"
 )
+NPM_UPDATE_COMMAND = "npx -y line-docs-skill@latest"
 
 
 def validate_references(references_root: Path) -> list[str]:
@@ -168,12 +169,12 @@ def validate_repository(project_root: Path) -> list[str]:
             errors.append(
                 "SKILL.md must not direct installed Skills to maintenance code"
             )
-        if "Before every LINE documentation task" not in skill_text:
-            errors.append("SKILL.md does not require refresh before every task")
-        if MANDATORY_UPDATE_COMMAND not in skill_text:
-            errors.append("SKILL.md does not contain the mandatory pull command")
-        if "If the pull fails" not in skill_text:
-            errors.append("SKILL.md does not define pull failure behavior")
+        if "Refresh only when the user asks" not in skill_text:
+            errors.append("SKILL.md does not describe explicit updates")
+        if GIT_UPDATE_COMMAND not in skill_text or NPM_UPDATE_COMMAND not in skill_text:
+            errors.append("SKILL.md does not document both update methods")
+        if "If the update" not in skill_text:
+            errors.append("SKILL.md does not define update failure behavior")
 
     manifest_path = project_root / "references" / "SYNC_MANIFEST.json"
     if manifest_path.is_file():
@@ -216,10 +217,8 @@ def validate_repository(project_root: Path) -> list[str]:
             errors.append(
                 f"{readme_name} has no AI Agent Installation Contract"
             )
-        if MANDATORY_UPDATE_COMMAND not in readme:
-            errors.append(
-                f"{readme_name} does not contain the mandatory pull command"
-            )
+        if GIT_UPDATE_COMMAND not in readme or NPM_UPDATE_COMMAND not in readme:
+            errors.append(f"{readme_name} does not document both update methods")
         for runtime_file in (
             "references/SYNC_MANIFEST.json",
             "references/INDEX.md",
