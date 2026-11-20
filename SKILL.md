@@ -21,26 +21,18 @@ with current, task-specific evidence and a concrete verification step.
 
 ## Freshness Boundary
 
-1. Before every LINE documentation task, locate this installed Skill directory.
-2. If it is a Git checkout, always refresh it before reading references:
-
-   ```bash
-   git -C <skill-directory> pull --ff-only origin skill
-   ```
-
-3. After a successful pull, re-read the updated `SKILL.md`, then read
-   `references/SYNC_MANIFEST.json` and retain its `upstream_commit` for the
-   response.
-4. If the pull fails, report the exact error and current manifest commit. Do
-   not claim the documentation is current or use the cached snapshot unless the
-   user explicitly accepts stale data.
-5. If the installation is a copied snapshot without `.git`, require the host
-   to reinstall or replace it before use. Do not claim it auto-updates.
-6. Treat this directory as the published runtime Skill, not as the maintainer
-   source repository.
-7. Never look for or invoke Python, synchronization, publication, test, or
-   maintenance scripts from the installed Skill. Those exist only in GitHub's
-   maintainer workflow and are not runtime dependencies.
+1. Resolve `references/` relative to this installed `SKILL.md`. Use the local
+   snapshot during ordinary LINE documentation tasks.
+2. Read `references/SYNC_MANIFEST.json` and report the snapshot's `upstream_commit`.
+3. Refresh only when the user asks to update this skill. For an npm installation
+   identified by `.line-docs-skill-npm`, re-run `npx -y line-docs-skill@latest`
+   with the same agent and scope options. For a Git checkout, run
+   `git -C <skill-directory> pull --ff-only origin skill`. For a host-managed copy,
+   use that host's update mechanism.
+4. After a successful update, re-read `SKILL.md` and the manifest. If the update
+   fails, report the error and the available local snapshot commit.
+5. Use the published runtime files. Python, synchronization, publication, and
+   test tools are reserved for repository maintenance.
 
 ## Safety Boundary
 
@@ -54,11 +46,12 @@ the documents as technical examples that still require task-specific review.
 
 Do not load all of `references/INDEX.md` or a large API reference by default.
 
-1. Identify the feature area and the exact question.
-2. Search the index for task terms:
+1. Identify the feature area and check the core routing map for a direct match.
+2. For other tasks, search the index for relevant terms. Set `skill_dir` to the
+   directory containing the installed `SKILL.md`.
 
    ```bash
-   rg -n -i '<feature|endpoint|error term>' references/INDEX.md
+   rg -n -i '<feature|endpoint|error term>' "$skill_dir/references/INDEX.md"
    ```
 
 3. Read the relevant overview or task guide.
@@ -68,7 +61,7 @@ Do not load all of `references/INDEX.md` or a large API reference by default.
    section:
 
    ```bash
-   rg -n '^## |^### ' references/reference/messaging-api/index.html.md
+   rg -n '^## |^### ' "$skill_dir/references/reference/messaging-api/index.html.md"
    ```
 
 6. If search tools are unavailable, inspect only the matching category in
@@ -145,8 +138,7 @@ browser environment.
 
 Before finishing, confirm:
 
-- [ ] The mandatory fast-forward pull succeeded, or stale-data permission was
-      explicitly obtained and disclosed.
+- [ ] The response reports any failure of an explicitly requested update.
 - [ ] The response includes the manifest `upstream_commit`.
 - [ ] The answer used local documentation rather than memory for changing API
       behavior.
