@@ -4,6 +4,6 @@
   "schema_version": 1,
   "source_subfolder": "docs/en",
   "source_url": "https://github.com/line/line-developers-docs-source.git",
-  "synced_at": "2026-11-24T14:28:14Z",
-  "upstream_commit": "1dffbc3cd7b2bc1c6280ac9acb9d0ece142255e5"
+  "synced_at": "2026-11-25T13:46:33Z",
+  "upstream_commit": "69d866a98e2a3c4af671b42612db11abafcd8fc9"
 }
