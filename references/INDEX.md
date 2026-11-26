@@ -404,6 +404,9 @@ This is a comprehensive index of the synchronized LINE Developers documentation,
 ## Docs > Messaging Api > Group Chats
 - [Group chats and multi-person chats](docs/messaging-api/group-chats/index.html.md)
 
+## Docs > Messaging Api > Handling Http 429 Errors
+- [Handle HTTP status code 429 errors in the Messaging API](docs/messaging-api/handling-http-429-errors/index.html.md)
+
 ## Docs > Messaging Api > Icon Nickname Switch
 - [Customize icon and display name](docs/messaging-api/icon-nickname-switch/index.html.md)
 
@@ -427,6 +430,9 @@ This is a comprehensive index of the synchronized LINE Developers documentation,
 
 ## Docs > Messaging Api > Overview
 - [Messaging API overview](docs/messaging-api/overview/index.html.md)
+
+## Docs > Messaging Api > Preventing Http 429 Errors
+- [Best practices for preventing HTTP status code 429 errors in the Messaging API](docs/messaging-api/preventing-http-429-errors/index.html.md)
 
 ## Docs > Messaging Api > Pricing
 - [Messaging API pricing](docs/messaging-api/pricing/index.html.md)
